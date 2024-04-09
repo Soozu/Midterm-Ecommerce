@@ -1,0 +1,81 @@
+/* Admin Page Styles */
+.admin-container {
+    width: 80%;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header {
+    text-align: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 30px;
+}
+
+.admin-header h1 {
+    color: #333;
+}
+
+/* Style the form elements */
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin-form label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.admin-form input[type="text"],
+.admin-form input[type="number"],
+.admin-form textarea,
+.admin-form input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.admin-form textarea {
+    resize: vertical; /* Allows vertical resizing */
+}
+
+.admin-form input[type="file"] {
+    background-color: #f7f7f7;
+}
+
+.admin-form button {
+    padding: 10px 20px;
+    background-color: #333; /* Dark background for the button */
+    color: white; /* White text for contrast */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.admin-form button:hover {
+    background-color: #555; /* Lighten the button color on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .admin-container {
+        width: 95%;
+    }
+}
+
+
+.success-message {
+    color: white;
+    background-color: green;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    text-align: center;
+}
