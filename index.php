@@ -24,6 +24,7 @@ $result = $conn->query($sql);
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <span>sdadadadad</span>
 <div class="loader" id="loader"></div>
 
 <?php include 'header.php'; ?>
