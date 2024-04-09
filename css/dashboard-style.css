@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    color: #333;
+}
+
+.dashboard-header, .dashboard-footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.dashboard-sidebar {
+    background-color: #f8f8f8;
+    padding: 20px;
+}
+
+.dashboard-sidebar a {
+    color: #333;
+    text-decoration: none;
+    padding: 5px;
+    display: block;
+}
+
+.dashboard-sidebar a:hover {
+    background-color: #e6e6e6;
+}
+
+.dashboard-content {
+    padding: 20px;
+}

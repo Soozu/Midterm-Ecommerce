@@ -1,0 +1,75 @@
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc; /* Light grey border for separation */
+    background-color: white; /* White background for the content */
+}
+
+.cart-item-image {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    margin-right: 10px;
+    border-radius: 5px; /* Optional: rounds the corners of the image */
+}
+
+.item-quantity, .item-price {
+    margin-left: 10px; /* Spacing between quantity and price */
+}
+
+.item-name, .item-quantity, .item-price {
+    color: black; /* Ensures text is black and contrasts against the white background */
+    margin: 0 5px; /* Adds some margin around the text */
+}
+
+/* Ensures that the total price is visible */
+.total-price {
+    color: black; /* Black color for contrast */
+    font-weight: bold; /* Makes it bold to stand out */
+}
+
+/* If you have a separate row for the item name, ensure it is visible */
+.item-name {
+    font-weight: bold; /* Optional: makes the product name bold */
+}
+
+/* If you have a separate row for the item quantity, ensure it is visible */
+.item-quantity {
+    min-width: 50px; /* Gives a fixed width to the quantity area */
+    text-align: center; /* Center aligns the quantity */
+}
+
+/* Styling for empty cart message */
+.cart-container p {
+    text-align: center;
+    color: black; /* Ensures the 'Your cart is empty' message is visible */
+    padding: 20px;
+    background-color: white; /* White background for the text to stand out */
+}
+
+/* Style for the entire cart container for better visibility */
+.cart-container {
+    background-color: white; /* White background */
+    color: black; /* Black text */
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* Additional styles to ensure the layout doesn't break */
+.cart-items {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style adjustments for the total summary */
+.cart-summary {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+}
+
