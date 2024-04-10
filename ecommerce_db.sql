@@ -49,6 +49,7 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `image`) VALUES
 -- Indexes for dumped tables
 --
 
+
 --
 -- Indexes for table `products`
 --
