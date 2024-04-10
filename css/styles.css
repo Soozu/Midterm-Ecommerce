@@ -361,12 +361,11 @@ header {
 
   
   .error-message {
-    color: red;
-    background-color: #fff0f0; /* Light red background */
-    border: 1px solid red;
-    border-radius: 5px;
-    padding: 10px;
+    color: #D8000C; /* Change color as needed */
+    background: #FFD2D2; /* Change background color as needed */
     margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
     text-align: center;
 }
 
