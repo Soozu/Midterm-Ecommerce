@@ -38,13 +38,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // If password doesn't match, set an error message
             $_SESSION['login_error'] = 'Incorrect username or password.';
-            header('Location: index.php'); // Redirect back to the login page
+            header('Location: index.php'); // Redirect back to the index page
             exit;
         }
     } else {
         // If no user exists with the given username, set an error message
         $_SESSION['login_error'] = 'Incorrect username or password.';
-        header('Location: index.php'); // Redirect back to the login page
+        header('Location: index.php'); // Redirect back to the index page
         exit;
     }
 
