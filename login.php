@@ -38,13 +38,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // If password doesn't match, set an error message
             $_SESSION['login_error'] = 'Incorrect username or password.';
-            header('Location: login.php'); // Redirect back to the login page
+            header('Location: index.php'); // Redirect back to the login page
             exit;
         }
     } else {
         // If no user exists with the given username, set an error message
         $_SESSION['login_error'] = 'Incorrect username or password.';
-        header('Location: login.php'); // Redirect back to the login page
+        header('Location: index.php'); // Redirect back to the login page
         exit;
     }
 
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 } else {
     // If the form hasn't been submitted, redirect to the login form
-    header('Location: login.php');
+    header('Location: index.php');
     exit;
 }
 ?>
