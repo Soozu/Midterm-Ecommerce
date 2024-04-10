@@ -33,18 +33,14 @@ $result = $conn->query($sql);
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2>Login</h2>
+    <!-- Display the login error message if set -->
     <?php if (isset($_SESSION['login_error'])): ?>
-        <div class="error-message">
-            <?php echo htmlspecialchars($_SESSION['login_error']); ?>
-        </div>
-        <?php unset($_SESSION['login_error']); // Clear the error after showing it ?>
-    <?php endif; ?>
-
-    <!-- To display the login error if there is one -->
-<?php if(isset($_SESSION['login_error'])): ?>
-    <p><?php echo $_SESSION['login_error']; ?></p>
-    <?php unset($_SESSION['login_error']); // Remove the message after displaying it ?>
+    <div class="error-message">
+        <?php echo htmlspecialchars($_SESSION['login_error']); ?>
+    </div>
+    <?php unset($_SESSION['login_error']); // Clear the error message ?>
 <?php endif; ?>
+
     <form action="login.php" method="post">
       <input type="text" name="username" placeholder="Username" required>
       <input type="password" name="password" placeholder="Password" required>
@@ -53,7 +49,6 @@ $result = $conn->query($sql);
     </form>
   </div>
 </div>
-
 
 
 <!-- Register Modal -->
@@ -118,7 +113,7 @@ $result = $conn->query($sql);
 </main>
 <?php include 'footer.php'; ?>
 <script>
-var loginError = <?php echo isset($_SESSION['login_error']) ? 'true' : 'false'; ?>;
+var loginError = <?php echo isset($_SESSION['show_login_modal']) ? 'true' : 'false'; ?>;
 </script>
 <script src="scripts/slideshow.js"></script>
 <script src="scripts/modal.js"></script>
