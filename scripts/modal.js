@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var switchToRegister = document.getElementById('switchToRegister');
     var switchToLogin = document.getElementById('switchToLogin');
     var closeSpans = document.getElementsByClassName('close');
+    
+
+    if (loginError) {
+        loginModal.style.display = 'block';
+    }
+
   
     if (typeof loginError !== 'undefined' && loginError) {
         loginModal.style.display = 'block';
