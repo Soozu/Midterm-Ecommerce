@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 21, 2024 at 10:54 AM
+-- Generation Time: Jun 21, 2024 at 04:01 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,10 +41,21 @@ CREATE TABLE `cart_items` (
 --
 
 INSERT INTO `cart_items` (`id`, `user_id`, `product_id`, `quantity`, `added_at`, `status`) VALUES
-(17, 4, 11, 4, '2024-06-18 09:57:24', 'active'),
-(18, 4, 12, 1, '2024-06-18 10:28:56', 'active'),
-(36, 3, 10, 2, '2024-06-21 06:44:10', 'active'),
-(37, 4, 10, 1, '2024-06-21 08:22:02', 'active');
+(17, 4, 11, 4, '2024-06-18 09:57:24', 'purchased'),
+(18, 4, 12, 1, '2024-06-18 10:28:56', 'purchased'),
+(37, 4, 10, 2, '2024-06-21 08:22:02', 'purchased'),
+(38, 4, 10, 2, '2024-06-21 12:38:04', 'active'),
+(39, 4, 12, 1, '2024-06-21 12:38:15', 'active'),
+(41, 3, 10, 16, '2024-06-21 13:05:37', 'purchased'),
+(42, 3, 12, 1, '2024-06-21 13:06:43', 'purchased'),
+(43, 3, 10, 3, '2024-06-21 13:30:40', 'purchased'),
+(44, 3, 10, 3, '2024-06-21 13:38:15', 'purchased'),
+(45, 3, 10, 3, '2024-06-21 13:49:15', 'purchased'),
+(46, 3, 13, 13, '2024-06-21 13:52:02', 'purchased'),
+(47, 3, 13, 13, '2024-06-21 13:52:17', 'purchased'),
+(48, 3, 12, 1, '2024-06-21 13:53:17', 'purchased'),
+(49, 3, 10, 3, '2024-06-21 13:57:23', 'purchased'),
+(50, 3, 10, 1, '2024-06-21 13:59:28', 'active');
 
 -- --------------------------------------------------------
 
@@ -90,13 +101,12 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `total`, `status`, `created_at`, `updated_at`, `shipping_address`, `shipping_city`, `shipping_postal_code`, `shipping_country`) VALUES
-(1, 3, 100.00, 'pending', '2024-06-21 05:36:57', '2024-06-21 05:36:57', '', '', '', ''),
-(2, 3, 3148.00, 'pending', '2024-06-21 05:47:54', '2024-06-21 05:47:54', '', '', '', ''),
-(3, 3, 20.00, 'pending', '2024-06-21 05:52:04', '2024-06-21 05:52:04', '', '', '', ''),
-(4, 3, 20.00, 'pending', '2024-06-21 05:53:46', '2024-06-21 05:53:46', '', '', '', ''),
-(5, 3, 20.00, 'pending', '2024-06-21 05:54:12', '2024-06-21 05:54:12', '', '', '', ''),
-(6, 3, 20.00, 'pending', '2024-06-21 05:57:26', '2024-06-21 05:57:26', '', '', '', ''),
-(7, 4, 60000.00, 'pending', '2024-06-21 08:51:10', '2024-06-21 08:51:10', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES');
+(12, 3, 0.00, 'pending', '2024-06-21 13:38:18', '2024-06-21 13:38:18', '', '', '', ''),
+(13, 3, 55.00, 'pending', '2024-06-21 13:51:50', '2024-06-21 13:51:50', '', '', '', ''),
+(14, 3, 1674.00, 'pending', '2024-06-21 13:52:10', '2024-06-21 13:52:10', '', '', '', ''),
+(15, 3, 3627.00, 'pending', '2024-06-21 13:52:26', '2024-06-21 13:52:26', '', '', '', ''),
+(17, 3, 295.00, 'pending', '2024-06-21 13:57:03', '2024-06-21 13:57:03', '', '', '', ''),
+(18, 3, 165.00, 'pending', '2024-06-21 13:58:50', '2024-06-21 13:58:50', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -111,6 +121,18 @@ CREATE TABLE `order_items` (
   `quantity` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
+(7, 12, 10, 1, 0.00),
+(8, 13, 10, 1, 55.00),
+(9, 14, 13, 6, 279.00),
+(10, 15, 13, 13, 279.00),
+(11, 17, 12, 1, 295.00),
+(12, 18, 10, 3, 55.00);
 
 -- --------------------------------------------------------
 
@@ -132,7 +154,11 @@ CREATE TABLE `order_shipping` (
 --
 
 INSERT INTO `order_shipping` (`id`, `order_id`, `address`, `city`, `postal_code`, `country`) VALUES
-(1, 7, 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES');
+(6, 13, '1', '1', '1', '1'),
+(7, 14, '2', '2', '2', '2'),
+(8, 15, '2', '2', '2', '2'),
+(9, 17, '2', '2', '2', '2'),
+(10, 18, '2', '2', '2', '2');
 
 -- --------------------------------------------------------
 
@@ -192,14 +218,10 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `category_id`, `image`, `stock_quantity`, `status`, `created_at`, `updated_at`) VALUES
-(10, 'qweqweqw', 'Christian', 10000.00, 1, 'product1.jpg', 18, 'active', '2024-06-11 05:47:22', '2024-06-21 08:22:02'),
-(11, 'King', 'Christian', 10000.00, 1, 'product1.jpg', 0, 'active', '2024-06-11 05:47:22', '2024-06-21 06:55:24'),
-(12, 'Pacifico', 'Christian', 10000.00, 1, 'product1.jpg', 20, 'active', '2024-06-11 05:47:22', '2024-06-11 06:00:22'),
-(13, 'LOLking', 'Christian', 10000.00, 1, 'product1.jpg', 20, 'active', '2024-06-11 05:47:22', '2024-06-11 06:00:22'),
-(17, '123', '213123123', 12312.00, 1, 'product1.jpg', 20, 'active', '2024-06-11 05:47:22', '2024-06-11 06:00:22'),
-(18, 'Pogi', '123', 123.00, 1, 'product1.jpg', 20, 'active', '2024-06-11 05:47:22', '2024-06-11 06:00:22'),
-(19, '123', '2313', 123.00, 1, 'product1.jpg', 20, 'active', '2024-06-11 05:47:22', '2024-06-11 06:00:22'),
-(20, '12323123', '3123123', 2.00, 1, 'product4.jpg', 20, 'active', '2024-06-11 05:47:22', '2024-06-11 06:00:22');
+(10, 'Pure Kojic Whitening Soap', 'Experience the transformative power of our Pure Kojic Whitening Soap. Crafted with high-quality kojic acid, this soap effectively targets hyperpigmentation, dark spots, and melasma. Its gentle formula exfoliates dead skin cells, revealing a brighter, more even complexion. Suitable for both face and body, this soap also contains nourishing ingredients that keep your skin hydrated and smooth. Achieve a clearer, more radiant skin tone with regular use of our Pure Kojic Whitening Soap.', 55.00, 1, 'item3.jpg', 6, 'active', '2024-06-11 05:47:22', '2024-06-21 13:59:28'),
+(11, 'Glass Skin Foam Facial Wash ', 'Achieve the coveted glass skin look with our Glass Skin Foam Facial Wash. This gentle yet effective facial cleanser removes impurities, excess oil, and makeup without stripping the skin of its natural moisture. Enriched with hydrating and brightening ingredients, it leaves your skin feeling fresh, smooth, and glowing. The foamy texture provides a luxurious cleansing experience, while the formula works to refine pores and enhance skin clarity. Suitable for all skin types, our Glass Skin Foam Facial Wash is your first step towards flawless, radiant skin.', 199.00, 1, 'item4.jpg', 0, 'active', '2024-06-11 05:47:22', '2024-06-21 12:22:46'),
+(12, 'Niacinamide Serum and Premium Sunscreen', 'Our Niacinamide Serum and Premium Sunscreen duo is the ultimate skincare power couple. The Niacinamide Serum, enriched with vitamin B3, helps to visibly reduce the appearance of pores, even out skin tone, and strengthen the skin barrier. Paired with our Premium Sunscreen, which provides broad-spectrum SPF 50 protection, this combination shields your skin from harmful UV rays while promoting a smooth, radiant complexion. Ideal for all skin types, this dynamic duo keeps your skin healthy, hydrated, and glowing all day long.', 295.00, 1, 'item1.jpg', 17, 'active', '2024-06-11 05:47:22', '2024-06-21 13:53:17'),
+(13, 'Milky Bleaching Whipped Cream', 'Indulge your skin with our Milky Bleaching Whipped Cream, a luxurious and creamy formulation designed to lighten and brighten your complexion. Infused with potent whitening agents and moisturizing milk extracts, this whipped cream gently fades dark spots, blemishes, and uneven skin tone. Its rich texture melts into the skin, leaving it soft, supple, and luminous. Perfect for daily use, this cream transforms dull skin into a radiant, flawless canvas.', 279.00, 1, 'item2.jpg', 18, 'active', '2024-06-11 05:47:22', '2024-06-21 13:52:17');
 
 -- --------------------------------------------------------
 
@@ -226,8 +248,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `salt`, `email`, `created_at`, `last_login`, `status`, `role`) VALUES
 (1, 'king', '$2y$10$PI9rmBmWgLetuA6frMqoJusEY5w4fN4rEhHNf1ka.tbWN61UlTdV6', NULL, 'kingpacifico009@gmail.com', '2024-04-02 05:50:13', '2024-06-14 11:45:19', 'active', 'customer'),
 (2, 'admin', '$2y$10$BJPQUnPnufzeR.6XZgdOLeZz7idv2052Td28.6mM1INDcsx7ZXkeW$2y$10$PI9rmBmWgLetuA6frMqoJusEY5w4fN4rEhHNf1ka.tbWN61UlTdV6', NULL, 'admin@example.com', '2024-04-09 06:05:00', NULL, 'active', 'admin'),
-(3, 'king23', '$2y$10$kygSCBJdCiTLefknVvfs0.N5czSyJ5TPE0.m3OtGZefn8yS8rbMdm', NULL, 'king@gmail.com', '2024-06-02 10:27:46', '2024-06-21 07:28:17', 'active', 'customer'),
-(4, 'soozu', '$2y$10$MUZXa5Mp3lTaGjqybhMNHeUr3dhA5XPIkdJfmXmmtxEZOQAh0caH6', NULL, 'kingpacifico0021@gmail.com', '2024-06-11 05:24:00', '2024-06-21 07:26:20', 'active', 'admin');
+(3, 'king23', '$2y$10$kygSCBJdCiTLefknVvfs0.N5czSyJ5TPE0.m3OtGZefn8yS8rbMdm', NULL, 'king@gmail.com', '2024-06-02 10:27:46', '2024-06-21 13:38:11', 'active', 'customer'),
+(4, 'soozu', '$2y$10$MUZXa5Mp3lTaGjqybhMNHeUr3dhA5XPIkdJfmXmmtxEZOQAh0caH6', NULL, 'kingpacifico0021@gmail.com', '2024-06-11 05:24:00', '2024-06-21 13:31:54', 'active', 'admin');
 
 -- --------------------------------------------------------
 
@@ -326,7 +348,7 @@ ALTER TABLE `user_favorites`
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -338,19 +360,19 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `order_shipping`
 --
 ALTER TABLE `order_shipping`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `password_resets`

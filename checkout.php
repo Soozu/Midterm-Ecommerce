@@ -43,108 +43,7 @@ while ($item = $cart_result->fetch_assoc()) {
     <title>Checkout</title>
     <link rel="stylesheet" href="css/checkout.css">
     <style>
-        /* Basic Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            display: block;
-            background-color: #f0f0f0; /* Light gray background for better contrast */
-            color: #333; /* Dark gray font color for better readability */
-            font-family: Arial, sans-serif; /* Clean and simple font */
-        }
-        .checkout-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 150px auto 0; /* Adjusted margin to create more space from the header */
-        }
-        .checkout-section {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            flex: 3;
-            margin-right: 20px;
-        }
-        .order-summary {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            flex: 1;
-        }
-        .checkout-section h2, .checkout-section h3, .order-summary h4 {
-            color: #000; /* Black color for headers */
-            margin-bottom: 10px;
-        }
-        .checkout-section p, .order-summary p {
-            margin: 10px 0;
-            color: #333; /* Dark gray font color */
-        }
-        .checkout-section form {
-            display: flex;
-            flex-direction: column;
-        }
-        .checkout-section label {
-            margin: 10px 0 5px;
-            color: #333; /* Dark gray font color */
-        }
-        .checkout-section input[type="text"], 
-        .checkout-section input[type="email"],
-        .checkout-section input[type="number"] {
-            padding: 10px;
-            margin: 5px 0 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #fff;
-            color: #000;
-        }
-        .checkout-section input[type="submit"] {
-            background-color: #000;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .checkout-section input[type="submit"]:hover {
-            background-color: #555;
-        }
-        .uk-text-muted {
-            color: #777; /* Medium gray for muted text */
-        }
-        .uk-text-danger {
-            color: #ff0000; /* Red for danger text */
-        }
-        .uk-button-primary {
-            background-color: #000;
-            color: #fff;
-        }
-        .uk-button-primary:hover {
-            background-color: #555;
-        }
-        .order-summary div {
-            margin-bottom: 10px;
-        }
-        .order-summary .uk-text-right {
-            text-align: right;
-        }
-        .order-summary .uk-text-muted,
-        .order-summary .uk-text-meta,
-        .order-summary .uk-text-danger,
-        .order-summary .uk-text-lead,
-        .order-summary .uk-text-bolder {
-            margin-bottom: 5px;
-        }
+
     </style>
 </head>
 <body>
@@ -192,6 +91,9 @@ while ($item = $cart_result->fetch_assoc()) {
                     <div class="uk-width-expand">
                         <div class="uk-text-small"><?= htmlspecialchars($item['name']); ?></div>
                         <div class="uk-text-meta"><?= $item['quantity']; ?> × ₱<?= number_format($item['price'], 2); ?></div>
+                    </div>
+                    <div class="uk-text-right">
+                        <div>₱<?= number_format($item['price'] * $item['quantity'], 2); ?></div>
                     </div>
                 </div>
                 <?php endforeach; ?>

@@ -87,3 +87,16 @@
         .uk-button-primary:hover {
             background-color: #555;
         }
+        .order-summary div {
+            margin-bottom: 10px;
+        }
+        .order-summary .uk-text-right {
+            text-align: right;
+        }
+        .order-summary .uk-text-muted,
+        .order-summary .uk-text-meta,
+        .order-summary .uk-text-danger,
+        .order-summary .uk-text-lead,
+        .order-summary .uk-text-bolder {
+            margin-bottom: 5px;
+        }
