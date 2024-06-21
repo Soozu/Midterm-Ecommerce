@@ -164,6 +164,8 @@ include 'header.php';  // Adjust the path as needed
             });
         });
     </script>
+    <?php include 'footer.php';?>
 </body>
 </html>
+
 

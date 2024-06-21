@@ -10,7 +10,6 @@
                 <li><a href="index.php">Home</a></li>
                 <li><a href="makeup.php">Make Up</a></li>
                 <li><a href="skincare.php">Skin Care</a></li>
-                <li><a href="favorites.php">Favorites</a></li>
                 <li><a href="cart.php">My Cart</a></li>
             </ul>
         </div>

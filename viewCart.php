@@ -10,7 +10,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
 
 $user_id = $_SESSION['id'];
-$stmt = $conn->prepare("SELECT p.name, p.price, p.id as product_id, ci.quantity FROM cart_items ci JOIN products p ON ci.product_id = p.id WHERE ci.user_id = ? AND ci.status = 'active'");
+$stmt = $conn->prepare("SELECT p.name, p.price, p.image, p.id as product_id, ci.quantity FROM cart_items ci JOIN products p ON ci.product_id = p.id WHERE ci.user_id = ? AND ci.status = 'active'");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -23,6 +23,7 @@ if ($result->num_rows > 0) {
         $item_total = $row['quantity'] * $row['price'];
         $total += $item_total;
         echo '<div class="cart-item">';
+        echo '<img src="img/' . htmlspecialchars($row['image']) . '" alt="' . htmlspecialchars($row['name']) . '" class="cart-item-image">';
         echo '<div class="item-details">' . htmlspecialchars($row['name']) . ' - $' . number_format($row['price'], 2) . '</div>';
         echo '<div class="quantity-controls">';
         echo '<button onclick="updateQuantity(' . $row['product_id'] . ', ' . max($row['quantity'] - 1, 1) . ')">-</button>';  // Ensures quantity cannot go below 1
@@ -30,7 +31,7 @@ if ($result->num_rows > 0) {
         echo '<button onclick="updateQuantity(' . $row['product_id'] . ', ' . ($row['quantity'] + 1) . ')">+</button>';
         echo '</div>';
         echo '<div class="item-price">₱' . number_format($item_total, 2) . '</div>';
-        echo '<button onclick="removeFromCart(' . $row['product_id'] . ')">Remove</button>';
+        echo '<button class="remove-button" onclick="removeFromCart(' . $row['product_id'] . ')">Remove</button>';
         echo '</div>';
     }
     echo '<div class="total-price">Total: ₱' . number_format($total, 2) . '</div>';
@@ -42,7 +43,6 @@ echo '</div>';
 
 
 ?>
-
 
 <script>
 function updateQuantity(productId, newQuantity) {
@@ -59,7 +59,6 @@ function updateQuantity(productId, newQuantity) {
         }
     });
 }
-
 
 function removeFromCart(productId) {
     console.log("Removing product with ID:", productId);  // Debug log
@@ -84,21 +83,18 @@ function removeFromCart(productId) {
         console.error('Error removing from cart:', error);
     });
 }
-
 </script>
-
-
-
 
 <style>
 body {
-    background-color: #f4f4f4;
+    background-color: #ffffff; /* White background */
     font-family: Arial, sans-serif;
+    color: #000000; /* Black text */
 }
 .cart-container {
     max-width: 800px;
     margin: 170px auto;
-    background: white;
+    background: #ffffff; /* White background */
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -116,6 +112,12 @@ body {
 .cart-item:last-child {
     border-bottom: none;
 }
+.cart-item img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 5px;
+}
 .item-details {
     flex-grow: 1;
 }
@@ -131,14 +133,20 @@ body {
 }
 button {
     padding: 8px 16px;
-    background-color: #0056b3;
-    color: white;
+    background-color: #000000; /* Black button */
+    color: #ffffff; /* White text */
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 button:hover {
-    background-color: #003580;
+    background-color: #444444; /* Darker black button */
 }
-
+.remove-button {
+    background-color: #ff0000; /* Red button */
+    color: #ffffff; /* White text */
+}
+.remove-button:hover {
+    background-color: #cc0000; /* Darker red button */
+}
 </style>
