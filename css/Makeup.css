@@ -1,57 +1,51 @@
-/* Makeup Section */
-.makeup {
+/* Products Section */
+.products {
     text-align: center;
+    padding: 20px;
 }
 
-.makeup-grid {
+.product-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
 }
 
-h1 {
-    font-size: 2em;
-    color: #000; /* Ensure the text color is black */
-    margin-bottom: 20px;
-}
-.makeup-item {
+.product {
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     overflow: hidden;
     width: 300px;
-    margin: 170px auto;
+    margin: 10px;
+    padding: 10px;
 }
 
-.makeup-item img {
+.product img {
     width: 100%;
-    height: 300px;
+    height: 200px;
     object-fit: cover;
 }
 
-.makeup-item h3 {
+.product h3 {
     margin: 15px 0;
-    font-size: 1.5em;
-    color: #333;
 }
 
-.makeup-item p {
+.product p {
     margin: 10px 0;
-    color: #666;
 }
 
-.makeup-item .price {
+.product .price {
     font-size: 1.2em;
     color: #333;
 }
 
-.makeup-item .stock {
+.product .stock {
     font-size: 1em;
     color: #999;
 }
 
-.makeup-item .button {
+.product .button {
     display: block;
     width: calc(100% - 20px);
     margin: 10px auto;
@@ -62,14 +56,25 @@ h1 {
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;
 }
 
-.makeup-item .button:hover {
+.product .button:hover {
     background-color: #444;
 }
 
-.makeup-item .out-of-stock {
+.product .out-of-stock {
     background-color: #f44336;
     color: #fff;
+}
+
+/* Description Toggle */
+.description-short {
+    display: block;
+}
+.description-full {
+    display: none;
+}
+.read-more {
+    color: #007BFF;
+    cursor: pointer;
 }

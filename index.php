@@ -40,6 +40,7 @@ $result = $conn->query($query);
 
     <h1 align="center">Products</h1>
     <section class="products">
+        <h1>Products</h1>
         <div id="products-container" class="product-grid">
             <?php if ($result->num_rows > 0): ?>
                 <?php while($product = $result->fetch_assoc()): ?>
@@ -47,11 +48,15 @@ $result = $conn->query($query);
                     <div class="product">
                         <figure>
                             <img src="img/<?= htmlspecialchars($product['image']); ?>" alt="<?= htmlspecialchars($product['name']); ?>">
-                            <figcaption><?= htmlspecialchars($product['description']); ?></figcaption>
+                            <figcaption>
+                                <span class="description-short"><?= htmlspecialchars(substr($product['description'], 0, 100)); ?>...</span>
+                                <span class="description-full"><?= htmlspecialchars($product['description']); ?></span>
+                                <span class="read-more">Read More</span>
+                            </figcaption>
                         </figure>
                         <h3><?= htmlspecialchars($product['name']); ?></h3>
                         <p class="price">$<?= number_format($product['price'], 2); ?></p>
-                        <p class="stock">Stock: <?= htmlspecialchars($product['stock_quantity']); ?></p>
+                        <p class="stock"><?= $isInStock ? "Stock: " . $product['stock_quantity'] : "<span style='color: red;'>Out of Stock</span>"; ?></p>
                         <?php if ($isInStock): ?>
                             <a href="addToCart.php?product_id=<?= $product['id']; ?>" class="button">Add to Cart</a>
                             <a href="addToCart.php?product_id=<?= $product['id']; ?>&checkout=true" class="button">Buy Now</a>
@@ -69,6 +74,26 @@ $result = $conn->query($query);
 </div>
 
 </main>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const readMoreLinks = document.querySelectorAll('.read-more');
+            readMoreLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const shortDescription = this.previousElementSibling.previousElementSibling;
+                    const fullDescription = this.previousElementSibling;
+                    if (fullDescription.style.display === 'none') {
+                        shortDescription.style.display = 'none';
+                        fullDescription.style.display = 'block';
+                        this.textContent = 'Read Less';
+                    } else {
+                        shortDescription.style.display = 'block';
+                        fullDescription.style.display = 'none';
+                        this.textContent = 'Read More';
+                    }
+                });
+            });
+        });
+    </script>
 
 <script src="cart.js"></script> <!-- Script for cart functionality -->
 <script src="slideshow.js"></script> <!-- Script for banner slide show -->
