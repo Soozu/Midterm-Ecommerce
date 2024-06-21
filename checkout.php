@@ -191,10 +191,7 @@ while ($item = $cart_result->fetch_assoc()) {
                 <div class="uk-grid-small" uk-grid>
                     <div class="uk-width-expand">
                         <div class="uk-text-small"><?= htmlspecialchars($item['name']); ?></div>
-                        <div class="uk-text-meta"><?= $item['quantity']; ?> × $<?= number_format($item['price'], 2); ?></div>
-                    </div>
-                    <div class="uk-text-right">
-                        <div>$<?= number_format($item['price'] * $item['quantity'], 2); ?></div>
+                        <div class="uk-text-meta"><?= $item['quantity']; ?> × ₱<?= number_format($item['price'], 2); ?></div>
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -224,7 +221,7 @@ while ($item = $cart_result->fetch_assoc()) {
                         <div class="uk-text-muted">Total</div>
                     </div>
                     <div class="uk-text-right">
-                        <div class="uk-text-lead uk-text-bolder">$<?= number_format($total_price, 2); ?></div>
+                        <div class="uk-text-lead uk-text-bolder">₱<?= number_format($total_price, 2); ?></div>
                     </div>
                 </div>
             </section>

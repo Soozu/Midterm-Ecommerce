@@ -55,7 +55,7 @@ $result = $conn->query($query);
                             </figcaption>
                         </figure>
                         <h3><?= htmlspecialchars($product['name']); ?></h3>
-                        <p class="price">$<?= number_format($product['price'], 2); ?></p>
+                        <p class="price">₱<?= number_format($product['price'], 2); ?></p>
                         <p class="stock"><?= $isInStock ? "Stock: " . $product['stock_quantity'] : "<span style='color: red;'>Out of Stock</span>"; ?></p>
                         <?php if ($isInStock): ?>
                             <a href="addToCart.php?product_id=<?= $product['id']; ?>" class="button">Add to Cart</a>
@@ -63,7 +63,6 @@ $result = $conn->query($query);
                         <?php else: ?>
                             <button disabled class="button out-of-stock">Out of Stock</button>
                         <?php endif; ?>
-
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>

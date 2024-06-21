@@ -29,11 +29,11 @@ if ($result->num_rows > 0) {
         echo ' ' . $row['quantity'] . ' ';
         echo '<button onclick="updateQuantity(' . $row['product_id'] . ', ' . ($row['quantity'] + 1) . ')">+</button>';
         echo '</div>';
-        echo '<div class="item-price">$' . number_format($item_total, 2) . '</div>';
+        echo '<div class="item-price">₱' . number_format($item_total, 2) . '</div>';
         echo '<button onclick="removeFromCart(' . $row['product_id'] . ')">Remove</button>';
         echo '</div>';
     }
-    echo '<div class="total-price">Total: $' . number_format($total, 2) . '</div>';
+    echo '<div class="total-price">Total: ₱' . number_format($total, 2) . '</div>';
     echo '<button onclick="window.location.href=\'checkout.php\'">Check Out</button>';
 } else {
     echo "<p>You have no items in your cart.</p>";

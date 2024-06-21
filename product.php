@@ -20,10 +20,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <img src="img/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
     <div>
         <h2><?php echo htmlspecialchars($product['name']); ?></h2>
-        <p class="price">Price: $<?php echo number_format($product['price'], 2); ?></p>
+        <p class="price">Price: ₱<?php echo number_format($product['price'], 2); ?></p>
         <p><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
-        <a href="javascript:void(0);" onclick="addToCart(<?php echo $product['id']; ?>)">Add to Cart</a>
-        <a href="addToFavorites.php?product_id=<?php echo $product['id']; ?>" class="button">Add to Favorites</a>
+        <a href="addToCart.php?product_id=<?= $product['id']; ?>" class="button">Add to Cart</a>
+        <a href="addToCart.php?product_id=<?= $product['id']; ?>&checkout=true" class="button">Buy Now</a>
     </div>
 </div>
 <?php

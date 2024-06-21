@@ -107,24 +107,26 @@ include 'header.php';  // Adjust the path as needed
     </style>
 </head>
 <body>
-    <!-- Makeup Products Section -->
-    <section class="products">
+ <!-- Makeup Products Section -->
+ <section class="products">
         <h1>Makeup Products</h1>
         <div class="product-grid">
             <?php if ($result->num_rows > 0): ?>
                 <?php while($product = $result->fetch_assoc()): ?>
                     <?php $isInStock = $product['stock_quantity'] > 0; ?>
                     <div class="product">
-                        <figure>
-                            <img src="img/<?= htmlspecialchars($product['image']); ?>" alt="<?= htmlspecialchars($product['name']); ?>">
-                            <figcaption>
-                                <span class="description-short"><?= htmlspecialchars(substr($product['description'], 0, 100)); ?>...</span>
-                                <span class="description-full"><?= htmlspecialchars($product['description']); ?></span>
-                                <span class="read-more">Read More</span>
-                            </figcaption>
-                        </figure>
+                        <a href="product.php?id=<?= $product['id']; ?>">
+                            <figure>
+                                <img src="img/<?= htmlspecialchars($product['image']); ?>" alt="<?= htmlspecialchars($product['name']); ?>">
+                                <figcaption>
+                                    <span class="description-short"><?= htmlspecialchars(substr($product['description'], 0, 100)); ?>...</span>
+                                    <span class="description-full"><?= htmlspecialchars($product['description']); ?></span>
+                                    <span class="read-more">Read More</span>
+                                </figcaption>
+                            </figure>
+                        </a>
                         <h3><?= htmlspecialchars($product['name']); ?></h3>
-                        <p class="price">$<?= number_format($product['price'], 2); ?></p>
+                        <p class="price">₱<?= number_format($product['price'], 2); ?></p>
                         <p class="stock"><?= $isInStock ? "Stock: " . $product['stock_quantity'] : "<span style='color: red;'>Out of Stock</span>"; ?></p>
                         <?php if ($isInStock): ?>
                             <a href="addToCart.php?product_id=<?= $product['id']; ?>" class="button">Add to Cart</a>
@@ -132,6 +134,7 @@ include 'header.php';  // Adjust the path as needed
                         <?php else: ?>
                             <button disabled class="button out-of-stock">Out of Stock</button>
                         <?php endif; ?>
+
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
@@ -144,7 +147,8 @@ include 'header.php';  // Adjust the path as needed
         document.addEventListener('DOMContentLoaded', function() {
             const readMoreLinks = document.querySelectorAll('.read-more');
             readMoreLinks.forEach(link => {
-                link.addEventListener('click', function() {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
                     const shortDescription = this.previousElementSibling.previousElementSibling;
                     const fullDescription = this.previousElementSibling;
                     if (fullDescription.style.display === 'none') {
