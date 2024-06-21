@@ -1,43 +1,54 @@
 <?php
 session_start();
+include 'db.php';  // Ensure the path is correct
 
-// Check for the session variable and display it
-if (isset($_SESSION['product_added'])) {
-    echo "<div class='success-message'>" . htmlspecialchars($_SESSION['product_added']) . "</div>";
-    // Unset the session variable so the message doesn't persist on page refresh
-    unset($_SESSION['product_added']);
-}
+// Check if the product ID is present
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $product_id = $_GET['id'];
 
+    // Prepare a statement to avoid SQL injection
+    $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Fetch the product
+    if ($product = $result->fetch_assoc()) {
+        include 'header.php';  // Include the header
 ?>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin - Add Product</title>
-    <link rel="stylesheet" href="css/admin.css"> 
-</head>
-<body>
-<div class="admin-container">
-    <div class="admin-header">
-        <h1>Add New Product</h1>
+        <div class="product-detail">
+    <img src="img/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+    <div>
+        <h2><?php echo htmlspecialchars($product['name']); ?></h2>
+        <p class="price">Price: $<?php echo number_format($product['price'], 2); ?></p>
+        <p><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
+        <a href="javascript:void(0);" onclick="addToCart(<?php echo $product['id']; ?>)">Add to Cart</a>
+        <a href="addToFavorites.php?product_id=<?php echo $product['id']; ?>" class="button">Add to Favorites</a>
     </div>
-    <form class="admin-form" action="product_process.php" method="post" enctype="multipart/form-data">
-        <label for="product-name">Product Name:</label>
-        <input type="text" id="product-name" name="product_name" required>
-
-        <label for="price">Price:</label>
-        <input type="number" id="price" name="price" required step="0.01">
-
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" rows="4"></textarea>
-
-        <label for="image">Image:</label>
-        <input type="file" id="image" name="image" required>
-
-        <button type="submit" name="submit">Add Product</button>
-    </form>
 </div>
-</body>
-</html>
+<?php
+        include 'footer.php';  // Include the footer
+    } else {
+        echo "<p>Product not found.</p>";
+    }
+} else {
+    echo "<p>Invalid product ID.</p>";
+}
+?>
+<link rel="stylesheet" href="css/product.css">
+<script>
+function addToCart(productId) {
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'AddToCart.php';
+
+    var hiddenField = document.createElement('input');
+    hiddenField.type = 'hidden';
+    hiddenField.name = 'product_id';
+    hiddenField.value = productId;
+    form.appendChild(hiddenField);
+
+    document.body.appendChild(form);
+    form.submit();
+}
+</script>

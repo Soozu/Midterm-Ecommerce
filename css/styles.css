@@ -4,118 +4,35 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 html, body {
     margin: 0;
     padding: 0;
-    height: 100%; /* Make sure the body takes up at least the full height of the viewport */
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+body {
     display: flex;
-    flex-direction: column; /* Stack main content and footer */
-}
-main {
-    flex: 1; /* Takes up the available space pushing the footer down */
-    /* Your existing main styles here */
-}
-/* Header Styles */
-header {
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
+    flex-direction: column;
 }
 
-.top-header, .bottom-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
+.main-content {
+    margin-top: 100px;
+    padding: 20px;
+    flex: 1;
+    overflow-y: auto;
 }
 
-.top-header {
-    padding: 10px 20px;
-}
-
-.logo-container img {
-    height: 50px;
-}
-
-.shop-name {
-    flex-grow: 1;
-    text-align: center;
-    font-size: 1.5em; /* Example size */
-    font-weight: bold;
-}
-
-.user-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.user-actions .profile-icon {
-    height: 30px; /* Example size */
-}
-
-.user-actions span {
-    margin-right: 10px; /* Space before the login link */
-}
-
-.user-actions a {
-    text-decoration: none;
-    color: white;
-}
-
-.bottom-header {
-    border-top: 1px solid #ddd; /* Separate line for navigation */
-}
-
-.navigation ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    padding: 10px 0;
-}
-
-.navigation a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-}
-
-.navigation a:hover {
-    color: #000;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .top-header, .bottom-header {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .navigation ul {
-        flex-direction: column;
-    }
-}
-
-  
 .banner {
-    position: relative;
-    max-width: 100%;
-    margin: auto;
-    overflow: hidden;
-}
-
-.slide {
-    display: none;
-}
-
-.slide.fade {
-    animation-name: fade;
-    animation-duration: 1.5s;
-}
-
-.banner img {
     width: 100%;
-    height: 500px;
-    display: block;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.slide-img {
+    width: 100%;
+    height: auto;
 }
 
 .prev, .next {
@@ -123,8 +40,8 @@ header {
     position: absolute;
     top: 50%;
     width: auto;
-    margin-top: -22px;
     padding: 16px;
+    margin-top: -22px;
     color: white;
     font-weight: bold;
     font-size: 18px;
@@ -142,305 +59,97 @@ header {
     background-color: rgba(0,0,0,0.8);
 }
 
-@keyframes fade {
-    from {opacity: .4} 
-    to {opacity: 1}
+/* Product Section */
+.products {
+    text-align: center;
+    padding: 20px 0;
 }
 
-  
 .product-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Creates a 4-column grid */
-    gap: 20px; /* Space between items */
-    margin: 50px 20px 80px; /* Top, left/right, bottom margins */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
 }
 
 .product {
-    background: #ffffff; /* Adds a background color */
-    border: 1px solid #eaeaea; /* Adds a subtle border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
-    border-radius: 4px; /* Rounds the corners */
-    overflow: hidden; /* Ensures the content fits nicely */
-    display: flex;
-    flex-direction: column; /* Stack items vertically */
-    justify-content: space-between; /* Distribute space evenly */
-}
-
-.product img {
-    max-width: 100%; /* Ensure the image is responsive */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Remove any inline spacing */
-}
-
-.product h3, .product p {
-    margin: 10px; /* Add some spacing around text */
-}
-
-/* Add a hover effect on the product for better user experience */
-.product:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    overflow: hidden;
+    width: 300px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Style the buttons */
-.product button {
-    padding: 10px;
-    width: calc(100% - 20px); /* Take into account the margin */
-    margin: 10px;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    font-weight: bold;
-    background-color: black; /* Button color */
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
 }
 
-.product button:hover {
-    background-color: #555; /* Darken button on hover */
-}
-
-
-
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-.modal-content {
-    background-color: #fff;
-    margin: 10% auto;
-    padding: 40px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    border-radius: 10px;
-    position: relative;
-  }
-  
-  input[type=text], input[type=password], input[type=email] {
+.product img {
     width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  button {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-
-
-.remember-me {
-    margin-bottom: 16px;
-  }
-  
- 
-  .password-container {
-    position: relative;
-  }
-  
-  .password-container input[type=password] {
-    padding-right: 40px; 
-  }
-  
-  .eye-icon {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    cursor: pointer;
-  }
-  
-  #loginRegisterLink {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: black;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
+    height: 280px;
+    border-bottom: 1px solid #eee;
 }
 
-#loginRegisterLink:hover, #loginRegisterLink:focus {
-    background-color: white;
-    color: black;
-    text-decoration: none; /* No underline on hover */
+.product h3 {
+    margin: 15px 0;
+    font-size: 1.5em;
+    color: #333;
 }
 
-
-/* Styling for the Log In / Register and Log Out buttons */
-.button-link {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: black;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.button-link:hover, .button-link:focus {
-    background-color: white;
-    color: black;
-    text-decoration: none; /* No underline on hover */
-}
-
-/* Styling for the username to make it cool/fantastic */
-.username-display {
-    display: inline-block;
-    margin-right: 10px;
-    padding: 5px 10px;
-    background-color: #444; /* Darker background for contrast */
-    color: #fff; /* White text */
-    border-radius: 15px; /* Rounded corners */
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Slight shadow for a "lifted" effect */
-}
-
-
-.loader {
-    border: 5px solid #f3f3f3; /* Light grey */
-    border-top: 5px solid #3498db; /* Blue */
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
-    display: none; /* Hidden by default */
-    position: absolute; /* Or fixed, depending on your needs */
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 100; /* High z-index to be on top */
-  }
-  
-  @keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-  }
-
-  
-  .error-message {
-    color: #D8000C; /* Change color as needed */
-    background: #FFD2D2; /* Change background color as needed */
+.product p {
     margin: 10px 0;
+    font-size: 1em;
+    color: #555;
+}
+
+.product .price {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+.product .stock {
+    font-size: 1em;
+    color: #999;
+}
+
+.product .button {
+    display: block;
+    width: calc(100% - 40px);
+    margin: 10px auto;
     padding: 10px;
-    border-radius: 5px;
     text-align: center;
-}
-
-  
-
-.site-footer {
-    background-color: #333;
+    border: none;
+    background-color: #000;
     color: #fff;
-    padding: 20px 0;
-    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.site-footer h3 {
-    color: #f8f8f8;
+.product .button:hover {
+    background-color: #444;
+    color: #fff;
 }
 
-.site-footer ul {
-    list-style: none;
-    padding-left: 0;
+.product .out-of-stock {
+    background-color: #f44336;
+    color: #fff;
+    cursor: not-allowed;
 }
 
-.site-footer ul li a {
-    color: #bbb;
-    text-decoration: none;
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .product-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .product {
+        width: 90%;
+        margin: 20px 0;
+    }
 }
-
-.site-footer ul li a:hover {
-    text-decoration: underline;
-}
-
-.site-footer .container {
-    display: flex;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.site-footer .footer-bottom {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.container > div {
-    flex: 1;
-    margin-right: 20px;
-}
-
-.container > div:last-child {
-    margin-right: 0;
-}
-
-.footer-bottom {
-    margin-top: auto; /* This will push the footer to the bottom */
-}
-
-.notification {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #f8f8f8;
-    padding: 15px;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    z-index: 1000;
-}
-
-.notification.success {
-    border-color: #4CAF50;
-    color: #4CAF50;
-}
-
-.notification.error {
-    border-color: #f44336;
-    color: #f44336;
-}
-
-
