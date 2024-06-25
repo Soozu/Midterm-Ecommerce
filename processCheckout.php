@@ -13,6 +13,7 @@ $shipping_city = $_POST['shipping_city'];
 $shipping_postal_code = $_POST['shipping_postal_code'];
 $shipping_country = $_POST['shipping_country'];
 $total_price = $_POST['total_price'];
+$cart_items = $_POST['cart_items'];
 
 $conn->begin_transaction();
 
@@ -31,22 +32,23 @@ try {
     $stmt->execute();
 
     // Insert into order_items table and update cart_items status
-    $query = "SELECT cart_items.*, products.price AS product_price FROM cart_items INNER JOIN products ON cart_items.product_id = products.id WHERE cart_items.user_id = ? AND cart_items.status = 'active'";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('i', $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    foreach ($cart_items as $product_id => $quantity) {
+        $query = "SELECT price FROM products WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('i', $product_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $product = $result->fetch_assoc();
 
-    while ($item = $result->fetch_assoc()) {
         $query = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param('iiid', $order_id, $item['product_id'], $item['quantity'], $item['product_price']);
+        $stmt->bind_param('iiid', $order_id, $product_id, $quantity, $product['price']);
         $stmt->execute();
 
         // Update cart_items status to 'purchased'
-        $query = "UPDATE cart_items SET status = 'purchased' WHERE id = ?";
+        $query = "UPDATE cart_items SET status = 'purchased' WHERE user_id = ? AND product_id = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param('i', $item['id']);
+        $stmt->bind_param('ii', $user_id, $product_id);
         $stmt->execute();
     }
 

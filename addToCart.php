@@ -47,6 +47,8 @@ try {
     $stmt->bind_param("i", $product_id);
     $stmt->execute();
 
+    
+
     // Check if the stock update was successful
     if ($stmt->affected_rows === 0) {
         throw new Exception("Failed to update stock quantity. Product may be out of stock.");
@@ -55,18 +57,23 @@ try {
     // Commit transaction
     $conn->commit();
 
-    // Redirect based on checkout parameter
+    // Set session variable for direct checkout
     if ($checkout) {
+        $_SESSION['success'] = "Item added to cart. Redirecting to checkout...";
+        $_SESSION['checkout_product_id'] = $product_id;
         header("Location: checkout.php");
     } else {
+        $_SESSION['success'] = "Item added to cart.";
         header("Location: viewCart.php");
     }
+    
     exit;
 
 } catch (Exception $e) {
     // Rollback transaction in case of error
     $conn->rollback();
-    echo "Error: " . $e->getMessage();
+    $_SESSION['error'] = "Error: " . $e->getMessage();
+    header("Location: viewCart.php");
     exit;
 }
 ?>

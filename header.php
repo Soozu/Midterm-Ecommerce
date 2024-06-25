@@ -5,34 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-commerce Mabines</title>
     <link rel="stylesheet" href="css/header.css"> <!-- Assuming you have a styles.css file -->
-<!-- Start of Async Drift Code -->
-<script>
-"use strict";
-
-!function() {
-  var t = window.driftt = window.drift = window.driftt || [];
-  if (!t.init) {
-    if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
-    t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], 
-    t.factory = function(e) {
-      return function() {
-        var n = Array.prototype.slice.call(arguments);
-        return n.unshift(e), t.push(n), t;
-      };
-    }, t.methods.forEach(function(e) {
-      t[e] = t.factory(e);
-    }), t.load = function(t) {
-      var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
-      o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
-      var i = document.getElementsByTagName("script")[0];
-      i.parentNode.insertBefore(o, i);
-    };
-  }
-}();
-drift.SNIPPET_VERSION = '0.3.1';
-drift.load('dc979ehmauk5');
-</script>
-<!-- End of Async Drift Code -->
+    <link rel="stylesheet" href="css/chat.css">
 </head>
 <body>
 <header>
@@ -74,6 +47,22 @@ drift.load('dc979ehmauk5');
             </nav>
         </div>
     </header>
+ <!-- Chat Support -->
+ <div class="chat-container" id="chat-container">
+        <div class="chat-header">
+            <h2>Support Chat</h2>
+            <button class="close-chat" onclick="toggleChat()">✖</button>
+        </div>
+        <div class="chat-box" id="chat-box">
+            <div class="bot-message">Hello, how can I help you?</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <button class="open-chat" id="open-chat" onclick="toggleChat()">Chat</button>
 
+    <script src="scripts/chat.js"></script>
 </body>
 </html>

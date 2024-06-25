@@ -2,146 +2,165 @@
 session_start();
 include 'db.php';
 
-// Check if the user is an admin
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['role'] !== 'admin') {
+// Check if the user is logged in and has admin privileges
+if (!isset($_SESSION['loggedin']) || $_SESSION['role'] !== 'admin') {
     header('Location: login.php');
     exit;
 }
 
-// Delete order if requested
-if (isset($_GET['delete_order']) && is_numeric($_GET['delete_order'])) {
-    $order_id = $_GET['delete_order'];
+// Fetch statistics for the dashboard
+$total_sales_query = "SELECT SUM(total) as total_sales FROM orders";
+$total_sales_result = $conn->query($total_sales_query);
+$total_sales = $total_sales_result->fetch_assoc()['total_sales'];
 
-    // Delete order items associated with this order
-    $query = "DELETE FROM order_items WHERE order_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('i', $order_id);
-    $stmt->execute();
+$orders_today_query = "SELECT COUNT(*) as orders_today FROM orders WHERE DATE(created_at) = CURDATE()";
+$orders_today_result = $conn->query($orders_today_query);
+$orders_today = $orders_today_result->fetch_assoc()['orders_today'];
 
-    // Delete the order
-    $query = "DELETE FROM orders WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('i', $order_id);
-    $stmt->execute();
-    
-    header('Location: admin.php');
-    exit;
+$total_users_query = "SELECT COUNT(*) as total_users FROM users";
+$total_users_result = $conn->query($total_users_query);
+$total_users = $total_users_result->fetch_assoc()['total_users'];
+
+$total_products_query = "SELECT COUNT(*) as total_products FROM products";
+$total_products_result = $conn->query($total_products_query);
+$total_products = $total_products_result->fetch_assoc()['total_products'];
+
+// Fetch weekly sales and orders data
+$sales_weekly_query = "SELECT DATE(created_at) as date, SUM(total) as total_sales FROM orders WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) GROUP BY DATE(created_at)";
+$sales_weekly_result = $conn->query($sales_weekly_query);
+
+$orders_weekly_query = "SELECT DATE(created_at) as date, COUNT(*) as total_orders FROM orders WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) GROUP BY DATE(created_at)";
+$orders_weekly_result = $conn->query($orders_weekly_query);
+
+$sales_data = [];
+$orders_data = [];
+$dates = [];
+
+while ($row = $sales_weekly_result->fetch_assoc()) {
+    $sales_data[] = $row['total_sales'];
+    $dates[] = $row['date'];
 }
 
-// Delete product if requested
-if (isset($_GET['delete_product']) && is_numeric($_GET['delete_product'])) {
-    $product_id = $_GET['delete_product'];
-
-    // Delete the product
-    $query = "DELETE FROM products WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('i', $product_id);
-    $stmt->execute();
-    
-    header('Location: admin.php');
-    exit;
+while ($row = $orders_weekly_result->fetch_assoc()) {
+    $orders_data[] = $row['total_orders'];
 }
 
-// Fetch all orders
-$query = "SELECT orders.id, users.username, orders.total, orders.status, orders.created_at 
-          FROM orders 
-          INNER JOIN users ON orders.user_id = users.id";
-$orders_result = $conn->query($query);
-
-// Fetch all products
-$query = "SELECT * FROM products";
-$products_result = $conn->query($query);
+// Ensure we have the same number of data points for both graphs
+if (count($sales_data) !== count($orders_data)) {
+    $max_count = max(count($sales_data), count($orders_data));
+    $sales_data = array_pad($sales_data, $max_count, 0);
+    $orders_data = array_pad($orders_data, $max_count, 0);
+    $dates = array_pad($dates, $max_count, '');
+}
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin - Manage Orders and Products</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="css/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <nav class="admin-nav">
-        <ul>
-            <li><a href="index.php">Homepage</a></li>
-            <li><a href="admin.php">Admin Dashboard</a></li>
-            <li><a href="add_product.php">Add Product</a></li>
-            <li><a href="logout.php">Log Out</a></li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        <h1>Manage Orders</h1>
-        <table class="order-table">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Username</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Ordered on</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if ($orders_result->num_rows > 0): ?>
-                    <?php while ($order = $orders_result->fetch_assoc()): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($order['id']); ?></td>
-                            <td><?= htmlspecialchars($order['username']); ?></td>
-                            <td>$<?= number_format($order['total'], 2); ?></td>
-                            <td><?= htmlspecialchars($order['status']); ?></td>
-                            <td><?= htmlspecialchars($order['created_at']); ?></td>
-                            <td>
-                                <a href="edit_order.php?id=<?= $order['id']; ?>" class="button">Edit</a>
-                                <a href="admin.php?delete_order=<?= $order['id']; ?>" class="button delete-button" onclick="return confirm('Are you sure you want to delete this order?');">Delete</a>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="6">No orders found.</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-
-        <h1>Manage Products</h1>
-        <table class="product-table">
-            <thead>
-                <tr>
-                    <th>Product ID</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Stock Quantity</th>
-                    <th>Category ID</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if ($products_result->num_rows > 0): ?>
-                    <?php while ($product = $products_result->fetch_assoc()): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($product['id']); ?></td>
-                            <td><?= htmlspecialchars($product['name']); ?></td>
-                            <td><?= htmlspecialchars($product['description']); ?></td>
-                            <td>$<?= number_format($product['price'], 2); ?></td>
-                            <td><?= htmlspecialchars($product['stock_quantity']); ?></td>
-                            <td><?= htmlspecialchars($product['category_id']); ?></td>
-                            <td>
-                                <a href="edit_product.php?id=<?= $product['id']; ?>" class="button">Edit</a>
-                                <a href="admin.php?delete_product=<?= $product['id']; ?>" class="button delete-button" onclick="return confirm('Are you sure you want to delete this product?');">Delete</a>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="7">No products found.</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-        <a href="add_product.php" class="button">Add New Product</a>
+    <div class="admin-container">
+        <nav class="admin-sidebar">
+            <ul>
+                <li><a href="admin.php">Dashboard</a></li>
+                <li><a href="OrderManagement.php">Order Management</a></li>
+                <li><a href="ProductManagement.php">Product Management</a></li>
+                <li><a href="Categories.php">Categories</a></li>
+                <li><a href="logout.php">Logout</a></li>
+            </ul>
+        </nav>
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Welcome, <?= htmlspecialchars($_SESSION['username']); ?></h1>
+                <p>Admin Dashboard</p>
+            </header>
+            <section class="admin-dashboard">
+                <div class="dashboard-card">
+                    <h3>Total Sales</h3>
+                    <p>₱<?= number_format($total_sales, 2); ?></p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Orders Today</h3>
+                    <p><?= $orders_today; ?></p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Total Users</h3>
+                    <p><?= $total_users; ?></p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Total Products</h3>
+                    <p><?= $total_products; ?></p>
+                </div>
+                <!-- Weekly Sales Graph -->
+                <div class="dashboard-card">
+                    <h3>Weekly Sales</h3>
+                    <canvas id="salesChart"></canvas>
+                </div>
+                <!-- Weekly Orders Graph -->
+                <div class="dashboard-card">
+                    <h3>Weekly Orders</h3>
+                    <canvas id="ordersChart"></canvas>
+                </div>
+            </section>
+        </main>
     </div>
+    <script>
+        // Weekly Sales Chart
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        const salesChart = new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: <?= json_encode($dates); ?>,
+                datasets: [{
+                    label: 'Weekly Sales',
+                    data: <?= json_encode($sales_data); ?>,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Weekly Orders Chart
+        const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+        const ordersChart = new Chart(ordersCtx, {
+            type: 'line',
+            data: {
+                labels: <?= json_encode($dates); ?>,
+                datasets: [{
+                    label: 'Weekly Orders',
+                    data: <?= json_encode($orders_data); ?>,
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>

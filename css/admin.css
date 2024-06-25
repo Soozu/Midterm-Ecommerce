@@ -1,151 +1,261 @@
-/* General Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    background-color: #f4f4f4;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: #fff;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 8px;
+.admin-container {
+    display: flex;
+    height: 100vh;
 }
 
-/* Navigation */
-.admin-nav ul {
+.admin-sidebar {
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+}
+
+.admin-sidebar ul {
     list-style: none;
     padding: 0;
-    display: flex;
-    justify-content: space-between;
-    background: #333;
-    margin-bottom: 20px;
-    border-radius: 8px;
-}
-
-.admin-nav ul li {
     margin: 0;
 }
 
-.admin-nav ul li a {
-    display: block;
-    padding: 15px 20px;
-    color: white;
+.admin-sidebar ul li {
+    padding: 20px;
+}
+
+.admin-sidebar ul li a {
+    color: #fff;
     text-decoration: none;
-    font-weight: bold;
 }
 
-.admin-nav ul li a:hover {
-    background: #555;
+.admin-sidebar ul li a:hover {
+    background-color: #555;
 }
 
-/* Tables */
-table {
-    width: 100%;
-    border-collapse: collapse;
+.admin-main {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.admin-header {
     margin-bottom: 20px;
 }
 
-th, td {
-    padding: 10px;
+.admin-header h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #333;
+}
+
+.admin-header p {
+    color: #666;
+}
+
+.admin-dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.dashboard-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: calc(50% - 10px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h3 {
+    margin: 0;
+    color: #333;
+}
+
+.dashboard-card p {
+    font-size: 1.5em;
+    margin: 10px 0 0;
+    color: #555;
+}
+
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+
+.admin-orders table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.admin-orders th, .admin-orders td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
     text-align: left;
-    border-bottom: 1px solid #ddd;
 }
 
-th {
-    background-color: #f2f2f2;
+.admin-orders th {
+    background-color: #f4f4f4;
 }
 
-tr:nth-child(even) {
+.admin-orders tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-/* Buttons */
-.button {
-    display: inline-block;
-    padding: 10px 15px;
-    margin: 5px;
-    background: #28a745;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
+.admin-orders tr:hover {
+    background-color: #f1f1f1;
 }
 
-.button:hover {
-    background: #218838;
+.admin-orders form {
+    display: flex;
+    align-items: center;
 }
 
-.delete-button {
-    background: #dc3545;
+.admin-orders select {
+    margin-right: 10px;
+    padding: 5px;
 }
 
-.delete-button:hover {
-    background: #c82333;
+.admin-orders button {
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
-/* Forms */
-.form-group {
-    margin-bottom: 15px;
+.admin-orders button:hover {
+    background-color: #555;
 }
 
-.form-group label {
+.admin-form form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.admin-form label {
     display: block;
     margin-bottom: 5px;
+    font-weight: bold;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: calc(100% - 22px); /* Adjust for padding */
-    padding: 10px;
+.admin-form input[type="text"],
+.admin-form input[type="number"],
+.admin-form textarea,
+.admin-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 4px;
+}
+
+.admin-form input[type="file"] {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.admin-form button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.admin-form button:hover {
+    background-color: #555;
+}
+
+.admin-button {
+    padding: 8px 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.admin-button:hover {
+    background-color: #555;
+}
+
+.admin-button-delete {
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.admin-button-delete:hover {
+    background-color: #d32f2f;
 }
 
 
-   /* Add your global CSS here */
-      /* Chat support styles */
-      #chat-container {
-        width: 300px;
-        height: 400px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        background: #fff;
-        display: none; /* Initially hidden */
-        z-index: 1000;
-    }
-    #chat-window {
-        height: 300px;
-        overflow-y: scroll;
-        border-bottom: 1px solid #ccc;
-        margin-bottom: 10px;
-    }
-    #messages {
-        list-style-type: none;
-        padding: 0;
-    }
-    #messageInput {
-        width: 80%;
-        padding: 10px;
-    }
-    #sendButton {
-        width: 18%;
-        padding: 10px;
-    }
-    #chat-toggle {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        padding: 10px;
-        background: #000;
-        color: #fff;
-        cursor: pointer;
-        z-index: 1000;
-    }
+
+.admin-categories table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.admin-categories table, .admin-categories th, .admin-categories td {
+    border: 1px solid #ddd;
+}
+
+.admin-categories th, .admin-categories td {
+    padding: 10px;
+    text-align: left;
+}
+
+.admin-categories th {
+    background-color: #f4f4f4;
+}
+
+.admin-form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.admin-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.admin-form input[type="text"],
+.admin-form button {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.admin-form button {
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+.admin-form button:hover {
+    background-color: #555;
+}
