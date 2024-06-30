@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 21, 2024 at 04:01 PM
+-- Generation Time: Jun 30, 2024 at 05:14 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,21 +41,10 @@ CREATE TABLE `cart_items` (
 --
 
 INSERT INTO `cart_items` (`id`, `user_id`, `product_id`, `quantity`, `added_at`, `status`) VALUES
-(17, 4, 11, 4, '2024-06-18 09:57:24', 'purchased'),
-(18, 4, 12, 1, '2024-06-18 10:28:56', 'purchased'),
-(37, 4, 10, 2, '2024-06-21 08:22:02', 'purchased'),
-(38, 4, 10, 2, '2024-06-21 12:38:04', 'active'),
-(39, 4, 12, 1, '2024-06-21 12:38:15', 'active'),
-(41, 3, 10, 16, '2024-06-21 13:05:37', 'purchased'),
-(42, 3, 12, 1, '2024-06-21 13:06:43', 'purchased'),
-(43, 3, 10, 3, '2024-06-21 13:30:40', 'purchased'),
-(44, 3, 10, 3, '2024-06-21 13:38:15', 'purchased'),
-(45, 3, 10, 3, '2024-06-21 13:49:15', 'purchased'),
-(46, 3, 13, 13, '2024-06-21 13:52:02', 'purchased'),
-(47, 3, 13, 13, '2024-06-21 13:52:17', 'purchased'),
-(48, 3, 12, 1, '2024-06-21 13:53:17', 'purchased'),
-(49, 3, 10, 3, '2024-06-21 13:57:23', 'purchased'),
-(50, 3, 10, 1, '2024-06-21 13:59:28', 'active');
+(73, 5, 27, 1, '2024-06-30 13:54:57', 'purchased'),
+(74, 5, 27, 1, '2024-06-30 13:55:27', 'purchased'),
+(75, 1, 28, 1, '2024-06-30 13:56:42', 'purchased'),
+(76, 1, 29, 1, '2024-06-30 14:09:05', 'purchased');
 
 -- --------------------------------------------------------
 
@@ -76,6 +65,64 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 (1, 'Make Up'),
 (2, 'Skin Care'),
 (3, 'Other Categories');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `delivered_orders`
+--
+
+CREATE TABLE `delivered_orders` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `shipping_address` varchar(255) NOT NULL,
+  `shipping_city` varchar(100) NOT NULL,
+  `shipping_postal_code` varchar(20) NOT NULL,
+  `shipping_country` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `delivered_orders`
+--
+
+INSERT INTO `delivered_orders` (`id`, `order_id`, `user_id`, `total`, `status`, `created_at`, `updated_at`, `shipping_address`, `shipping_city`, `shipping_postal_code`, `shipping_country`) VALUES
+(45, 31, 1, 55.00, 'delivered', '2024-06-30 09:38:08', '2024-06-30 09:40:20', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
+(46, 30, 4, 199.00, 'delivered', '2024-06-30 08:08:31', '2024-06-30 08:10:01', 'sda', 'asd', 'asd', 'sd'),
+(47, 29, 4, 295.00, 'delivered', '2024-06-30 06:52:36', '2024-06-30 13:56:14', '', '', '', ''),
+(48, 32, 5, 299.00, 'delivered', '2024-06-30 13:55:05', '2024-06-30 13:56:16', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
+(49, 33, 5, 299.00, 'delivered', '2024-06-30 13:55:36', '2024-06-30 13:56:18', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
+(50, 30, 4, 199.00, 'delivered', '2024-06-30 08:08:31', '2024-06-30 08:10:01', 'sda', 'asd', 'asd', 'sd'),
+(51, 34, 1, 149.00, 'delivered', '2024-06-30 13:56:46', '2024-06-30 13:57:00', '123', '123', '123', '123'),
+(52, 35, 1, 479.00, 'delivered', '2024-06-30 14:09:11', '2024-06-30 14:09:58', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `delivered_order_items`
+--
+
+CREATE TABLE `delivered_order_items` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `delivered_order_items`
+--
+
+INSERT INTO `delivered_order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
+(31, 48, 27, 1, 299.00),
+(32, 49, 27, 1, 299.00),
+(33, 51, 28, 1, 149.00),
+(34, 52, 29, 1, 479.00);
 
 -- --------------------------------------------------------
 
@@ -101,12 +148,15 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `total`, `status`, `created_at`, `updated_at`, `shipping_address`, `shipping_city`, `shipping_postal_code`, `shipping_country`) VALUES
-(12, 3, 0.00, 'pending', '2024-06-21 13:38:18', '2024-06-21 13:38:18', '', '', '', ''),
-(13, 3, 55.00, 'pending', '2024-06-21 13:51:50', '2024-06-21 13:51:50', '', '', '', ''),
-(14, 3, 1674.00, 'pending', '2024-06-21 13:52:10', '2024-06-21 13:52:10', '', '', '', ''),
-(15, 3, 3627.00, 'pending', '2024-06-21 13:52:26', '2024-06-21 13:52:26', '', '', '', ''),
-(17, 3, 295.00, 'pending', '2024-06-21 13:57:03', '2024-06-21 13:57:03', '', '', '', ''),
-(18, 3, 165.00, 'pending', '2024-06-21 13:58:50', '2024-06-21 13:58:50', '', '', '', '');
+(27, 4, 199.00, 'delivered', '2024-06-30 06:29:20', '2024-06-30 10:18:17', '', '', '', ''),
+(28, 4, 597.00, 'delivered', '2024-06-30 06:41:52', '2024-06-30 06:54:25', '', '', '', ''),
+(29, 4, 295.00, 'delivered', '2024-06-30 06:52:36', '2024-06-30 13:56:14', '', '', '', ''),
+(30, 4, 199.00, 'delivered', '2024-06-30 08:08:31', '2024-06-30 08:10:01', 'sda', 'asd', 'asd', 'sd'),
+(31, 1, 55.00, 'delivered', '2024-06-30 09:38:08', '2024-06-30 09:40:20', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
+(32, 5, 299.00, 'delivered', '2024-06-30 13:55:05', '2024-06-30 13:56:16', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
+(33, 5, 299.00, 'delivered', '2024-06-30 13:55:36', '2024-06-30 13:56:18', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
+(34, 1, 149.00, 'delivered', '2024-06-30 13:56:46', '2024-06-30 13:57:00', '123', '123', '123', '123'),
+(35, 1, 479.00, 'delivered', '2024-06-30 14:09:11', '2024-06-30 14:09:58', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES');
 
 -- --------------------------------------------------------
 
@@ -127,12 +177,10 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
-(7, 12, 10, 1, 0.00),
-(8, 13, 10, 1, 55.00),
-(9, 14, 13, 6, 279.00),
-(10, 15, 13, 13, 279.00),
-(11, 17, 12, 1, 295.00),
-(12, 18, 10, 3, 55.00);
+(24, 32, 27, 1, 299.00),
+(25, 33, 27, 1, 299.00),
+(26, 34, 28, 1, 149.00),
+(27, 35, 29, 1, 479.00);
 
 -- --------------------------------------------------------
 
@@ -148,17 +196,6 @@ CREATE TABLE `order_shipping` (
   `postal_code` varchar(20) NOT NULL,
   `country` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `order_shipping`
---
-
-INSERT INTO `order_shipping` (`id`, `order_id`, `address`, `city`, `postal_code`, `country`) VALUES
-(6, 13, '1', '1', '1', '1'),
-(7, 14, '2', '2', '2', '2'),
-(8, 15, '2', '2', '2', '2'),
-(9, 17, '2', '2', '2', '2'),
-(10, 18, '2', '2', '2', '2');
 
 -- --------------------------------------------------------
 
@@ -210,18 +247,72 @@ CREATE TABLE `products` (
   `stock_quantity` int(11) DEFAULT 0,
   `status` enum('active','inactive') DEFAULT 'active',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `avg_rating` float DEFAULT 0,
+  `num_sold` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `description`, `price`, `category_id`, `image`, `stock_quantity`, `status`, `created_at`, `updated_at`) VALUES
-(10, 'Pure Kojic Whitening Soap', 'Experience the transformative power of our Pure Kojic Whitening Soap. Crafted with high-quality kojic acid, this soap effectively targets hyperpigmentation, dark spots, and melasma. Its gentle formula exfoliates dead skin cells, revealing a brighter, more even complexion. Suitable for both face and body, this soap also contains nourishing ingredients that keep your skin hydrated and smooth. Achieve a clearer, more radiant skin tone with regular use of our Pure Kojic Whitening Soap.', 55.00, 1, 'item3.jpg', 6, 'active', '2024-06-11 05:47:22', '2024-06-21 13:59:28'),
-(11, 'Glass Skin Foam Facial Wash ', 'Achieve the coveted glass skin look with our Glass Skin Foam Facial Wash. This gentle yet effective facial cleanser removes impurities, excess oil, and makeup without stripping the skin of its natural moisture. Enriched with hydrating and brightening ingredients, it leaves your skin feeling fresh, smooth, and glowing. The foamy texture provides a luxurious cleansing experience, while the formula works to refine pores and enhance skin clarity. Suitable for all skin types, our Glass Skin Foam Facial Wash is your first step towards flawless, radiant skin.', 199.00, 1, 'item4.jpg', 0, 'active', '2024-06-11 05:47:22', '2024-06-21 12:22:46'),
-(12, 'Niacinamide Serum and Premium Sunscreen', 'Our Niacinamide Serum and Premium Sunscreen duo is the ultimate skincare power couple. The Niacinamide Serum, enriched with vitamin B3, helps to visibly reduce the appearance of pores, even out skin tone, and strengthen the skin barrier. Paired with our Premium Sunscreen, which provides broad-spectrum SPF 50 protection, this combination shields your skin from harmful UV rays while promoting a smooth, radiant complexion. Ideal for all skin types, this dynamic duo keeps your skin healthy, hydrated, and glowing all day long.', 295.00, 1, 'item1.jpg', 17, 'active', '2024-06-11 05:47:22', '2024-06-21 13:53:17'),
-(13, 'Milky Bleaching Whipped Cream', 'Indulge your skin with our Milky Bleaching Whipped Cream, a luxurious and creamy formulation designed to lighten and brighten your complexion. Infused with potent whitening agents and moisturizing milk extracts, this whipped cream gently fades dark spots, blemishes, and uneven skin tone. Its rich texture melts into the skin, leaving it soft, supple, and luminous. Perfect for daily use, this cream transforms dull skin into a radiant, flawless canvas.', 279.00, 1, 'item2.jpg', 18, 'active', '2024-06-11 05:47:22', '2024-06-21 13:52:17');
+INSERT INTO `products` (`id`, `name`, `description`, `price`, `category_id`, `image`, `stock_quantity`, `status`, `created_at`, `updated_at`, `avg_rating`, `num_sold`) VALUES
+(27, 'Brushes', 'Tools used to apply makeup products. They come in various shapes and sizes, each designed for specific tasks like applying foundation, blending eye shadow, or contouring.', 299.00, 1, 'Brushes(product1).jpeg', 18, NULL, '2024-06-30 11:33:21', '2024-06-30 13:55:27', 0, 0),
+(28, 'Mascara', 'A cosmetic used to enhance the eyelashes by darkening, lengthening, and thickening them. It is available in different formulas like waterproof and volumizing.', 149.00, 1, 'Mascara(product8).jpeg', 19, NULL, '2024-06-30 11:35:14', '2024-06-30 13:56:42', 0, 0),
+(29, 'Lip Gloss', 'A shiny, often translucent cosmetic applied to the lips for a glossy finish. It can be worn alone or over lipstick for added shine.', 479.00, 1, 'LipGloss(product5).jpeg', 19, NULL, '2024-06-30 11:35:55', '2024-06-30 14:09:05', 0, 0),
+(30, 'Lip Liner', 'A pencil-like product used to outline the lips, preventing lipstick from feathering and providing a defined shape.', 399.00, 1, 'LipLiner(product6).png', 20, NULL, '2024-06-30 11:36:53', '2024-06-30 11:36:53', 0, 0),
+(31, 'Eye Liner', 'A makeup product used to define the eyes. It can be applied along the lash line or waterline and comes in forms such as pencil, liquid, gel, and powder.', 249.00, 1, 'EyeLiner(product2).png', 20, NULL, '2024-06-30 11:37:43', '2024-06-30 11:37:43', 0, 0),
+(32, 'Lip Stick', 'A cosmetic product applied to the lips to add color and texture. It is available in various finishes like matte, satin, and glossy.', 250.00, 1, 'Lipstick(product7).jpeg', 20, NULL, '2024-06-30 11:38:19', '2024-06-30 11:38:19', 0, 0),
+(33, 'Eye Shadow', 'A cosmetic applied to the eyelids and under the eyes to add color, depth, and dimension. It comes in various forms such as powder, cream, and liquid.', 799.00, 1, 'EyeShadow(product3).jpeg', 200, NULL, '2024-06-30 11:39:01', '2024-06-30 11:39:01', 0, 0),
+(34, 'Foundation Cream', 'A skin-colored makeup applied to the face to create an even, uniform complexion, cover imperfections, and sometimes alter skin tone. It comes in liquid, cream, powder, and stick forms.', 249.00, 1, 'FoundationCream(product4).jpeg', 20, NULL, '2024-06-30 11:39:56', '2024-06-30 11:39:56', 0, 0),
+(35, 'Eye Cream', 'A specialized cream formulated for the delicate skin around the eyes. It targets concerns like puffiness, dark circles, and fine lines, providing hydration and nourishment.', 179.00, 2, 'EyeCream(product1).jpeg', 20, 'active', '2024-06-30 11:40:34', '2024-06-30 11:41:59', 0, 0),
+(36, 'Toner', 'A liquid skincare product used after cleansing to help remove any remaining impurities, balance the skin\'s pH, and prepare the skin for subsequent products like serums and moisturizers.', 329.00, 2, 'Toner(product2).jpeg', 20, NULL, '2024-06-30 11:41:48', '2024-06-30 11:41:48', 0, 0),
+(37, 'Moisturizer', 'A skincare product that hydrates and locks in moisture in the skin. It helps to maintain the skin\'s barrier function, keeping it soft, smooth, and supple. Moisturizers are available in different formulations like creams, lotions, gels, and ointments for various skin types.', 129.00, 2, 'Moisturizer(product3).jpeg', 20, NULL, '2024-06-30 11:53:57', '2024-06-30 11:53:57', 0, 0),
+(38, 'Facial Cleanser', 'A product used to remove dirt, oil, makeup, and impurities from the skin. It comes in various forms such as gel, cream, foam, oil, and micellar water, catering to different skin types and concerns.', 299.00, 2, 'FacialCleanser(product4).jpeg', 20, NULL, '2024-06-30 11:54:32', '2024-06-30 11:54:32', 0, 0),
+(39, 'Milky Bleaching Whipped Cream', 'All in one whitening cream with exfoliant for face and body. With micro beads to physically exfoliate the skin. Improves skin texture, with instant whitening effect, infused with powerful whitening active ingredients, helps to fade stretch marks, whitens dark areas of your skin such as armpit, butt, knees, elbows, gives a youthful glow with regular use.', 279.00, 2, 'MilkyBleachingWhippedCream(product5).jpeg', 20, NULL, '2024-06-30 11:55:15', '2024-06-30 11:55:15', 0, 0),
+(40, 'Niacinamide Serum and Premium Sunscreen', '- Anti-inflamatory\r\n- Anti-aging\r\n- Anti oxidant\r\n- Brightens the skin\r\n- Helps boost tone & lighten dark spots\r\n- Reduced pore appearance\r\n- Shields your skin from developing\r\nwrinkles, fine lines & hyperpigmentation\r\n- Protects our skin from harmful rays\r\n- Improves skin texture', 295.00, 2, 'NiacinamideSerumandPremiumSunscreen(product6).jpeg', 20, NULL, '2024-06-30 11:56:18', '2024-06-30 11:56:18', 0, 0),
+(41, 'Pure Kojic Whitening Soap', '- Reducing hyperpigmentation, dark   spots, and age spots.\r\n- May fade the appearance of scars and acne marks. \r\n- Act as a gentle exfoliator\r\n- Removing dead skin cells and promoting cell renewal.', 55.00, 2, 'PureKojicWhiteningSoap(product7).jpeg', 20, NULL, '2024-06-30 11:57:10', '2024-06-30 11:57:10', 0, 0),
+(42, 'Glass Skin Foam Facial Wash', 'A lightweight, airy facial cleanser that creates a rich foam. It\'s designed to gently cleanse the skin, removing impurities and excess oil without stripping moisture.', 199.00, 2, 'GlassSkinFoamFacialWash(product8).jpeg', 20, NULL, '2024-06-30 11:58:15', '2024-06-30 11:58:15', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings`
+--
+
+CREATE TABLE `ratings` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `rating` int(11) NOT NULL,
+  `comment` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `order_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ratings`
+--
+
+INSERT INTO `ratings` (`id`, `product_id`, `user_id`, `rating`, `comment`, `created_at`, `order_id`) VALUES
+(10, 27, 5, 5, 'Testing', '2024-06-30 13:57:21', 32),
+(11, 29, 1, 5, '123', '2024-06-30 14:10:42', 35);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `refunds`
+--
+
+CREATE TABLE `refunds` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `reason` text NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -247,9 +338,10 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `salt`, `email`, `created_at`, `last_login`, `status`, `role`) VALUES
 (1, 'king', '$2y$10$PI9rmBmWgLetuA6frMqoJusEY5w4fN4rEhHNf1ka.tbWN61UlTdV6', NULL, 'kingpacifico009@gmail.com', '2024-04-02 05:50:13', '2024-06-14 11:45:19', 'active', 'customer'),
-(2, 'admin', '$2y$10$BJPQUnPnufzeR.6XZgdOLeZz7idv2052Td28.6mM1INDcsx7ZXkeW$2y$10$PI9rmBmWgLetuA6frMqoJusEY5w4fN4rEhHNf1ka.tbWN61UlTdV6', NULL, 'admin@example.com', '2024-04-09 06:05:00', NULL, 'active', 'admin'),
-(3, 'king23', '$2y$10$kygSCBJdCiTLefknVvfs0.N5czSyJ5TPE0.m3OtGZefn8yS8rbMdm', NULL, 'king@gmail.com', '2024-06-02 10:27:46', '2024-06-21 13:38:11', 'active', 'customer'),
-(4, 'soozu', '$2y$10$MUZXa5Mp3lTaGjqybhMNHeUr3dhA5XPIkdJfmXmmtxEZOQAh0caH6', NULL, 'kingpacifico0021@gmail.com', '2024-06-11 05:24:00', '2024-06-21 13:31:54', 'active', 'admin');
+(3, 'king23', '$2y$10$kygSCBJdCiTLefknVvfs0.N5czSyJ5TPE0.m3OtGZefn8yS8rbMdm', NULL, 'king@gmail.com', '2024-06-02 10:27:46', '2024-06-30 06:27:16', 'active', 'customer'),
+(4, 'soozu', '$2y$10$MUZXa5Mp3lTaGjqybhMNHeUr3dhA5XPIkdJfmXmmtxEZOQAh0caH6', NULL, 'kingpacifico0021@gmail.com', '2024-06-11 05:24:00', '2024-06-30 06:27:49', 'active', 'admin'),
+(5, 'admin', '$2y$10$TlOaovFkxxsxTNucUQBpeerYwIzEgg.18dWEJddCBIiwWPWAKTFUO', NULL, 'christian.pacifico@cvsu.edu.ph', '2024-06-30 09:21:40', NULL, 'active', 'admin'),
+(6, 'pacifico123', '$2y$10$hxc4YMLWkdVf42ebzWly/.zHgkfrqRbutPSJ1FE8z6U5X2lJeDH0m', NULL, 'pacificoc77@gmail.com', '2024-06-30 09:28:25', NULL, 'active', 'customer');
 
 -- --------------------------------------------------------
 
@@ -262,16 +354,6 @@ CREATE TABLE `user_favorites` (
   `user_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `user_favorites`
---
-
-INSERT INTO `user_favorites` (`id`, `user_id`, `product_id`) VALUES
-(2, 3, 10),
-(3, 3, 11),
-(4, 4, 10),
-(5, 3, 12);
 
 --
 -- Indexes for dumped tables
@@ -288,6 +370,21 @@ ALTER TABLE `cart_items`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `delivered_orders`
+--
+ALTER TABLE `delivered_orders`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
+-- Indexes for table `delivered_order_items`
+--
+ALTER TABLE `delivered_order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indexes for table `orders`
@@ -326,6 +423,21 @@ ALTER TABLE `products`
   ADD KEY `idx_category_id` (`category_id`);
 
 --
+-- Indexes for table `ratings`
+--
+ALTER TABLE `ratings`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_id` (`product_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `refunds`
+--
+ALTER TABLE `refunds`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -348,7 +460,7 @@ ALTER TABLE `user_favorites`
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -357,22 +469,34 @@ ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `delivered_orders`
+--
+ALTER TABLE `delivered_orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+
+--
+-- AUTO_INCREMENT for table `delivered_order_items`
+--
+ALTER TABLE `delivered_order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `order_shipping`
 --
 ALTER TABLE `order_shipping`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `password_resets`
@@ -384,13 +508,25 @@ ALTER TABLE `password_resets`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT for table `ratings`
+--
+ALTER TABLE `ratings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `refunds`
+--
+ALTER TABLE `refunds`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `user_favorites`
@@ -401,6 +537,21 @@ ALTER TABLE `user_favorites`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `delivered_orders`
+--
+ALTER TABLE `delivered_orders`
+  ADD CONSTRAINT `delivered_orders_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
+
+--
+-- Constraints for table `delivered_order_items`
+--
+ALTER TABLE `delivered_order_items`
+  ADD CONSTRAINT `delivered_order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `delivered_orders` (`id`),
+  ADD CONSTRAINT `delivered_order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+  ADD CONSTRAINT `delivered_order_items_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `delivered_orders` (`id`),
+  ADD CONSTRAINT `delivered_order_items_ibfk_4` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 
 --
 -- Constraints for table `orders`
@@ -433,6 +584,19 @@ ALTER TABLE `password_resets`
 ALTER TABLE `products`
   ADD CONSTRAINT `fk_category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_category_products` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `ratings`
+--
+ALTER TABLE `ratings`
+  ADD CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+  ADD CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `refunds`
+--
+ALTER TABLE `refunds`
+  ADD CONSTRAINT `refunds_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
 
 --
 -- Constraints for table `user_favorites`
