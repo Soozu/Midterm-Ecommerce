@@ -78,25 +78,6 @@ $avg_rating = $avg_rating_result->fetch_assoc();
             </div>
         <?php endwhile; ?>
     </div>
-
-    <!-- Add Comment Section -->
-    <div class="add-comment">
-        <h2>Leave a Review</h2>
-        <form action="addComment.php" method="post">
-            <input type="hidden" name="product_id" value="<?= $product_id; ?>">
-            <label for="rating">Rating:</label>
-            <select id="rating" name="rating" required>
-                <option value="1">1 Star</option>
-                <option value="2">2 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="5">5 Stars</option>
-            </select>
-            <label for="comment">Comment:</label>
-            <textarea id="comment" name="comment" rows="4" required></textarea>
-            <input type="submit" value="Submit Review">
-        </form>
-    </div>
 </body>
 </html>
 

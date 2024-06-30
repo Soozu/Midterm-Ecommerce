@@ -5,8 +5,20 @@ include 'header.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    $_SESSION['login_required'] = true;  // Set a session variable
-    header("Location: login.php");  // Redirect to the login page
+    echo '
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Login Required</title>
+        <link rel="stylesheet" href="css/login-message.css">
+    </head>
+    <body>
+        <div class="login-message">
+            <p>Please log in to view your cart.</p>
+            <a href="login.php">Login</a>
+        </div>
+    </body>
+    </html>';
     exit;
 }
 

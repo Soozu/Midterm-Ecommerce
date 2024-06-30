@@ -57,11 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_category'])) {
     <div class="admin-container">
         <nav class="admin-sidebar">
             <ul>
-                <li><a href="admin.php">Dashboard</a></li>
-                <li><a href="OrderManagement.php">Order Management</a></li>
-                <li><a href="ProductManagement.php">Product Management</a></li>
-                <li><a href="Categories.php">Categories</a></li>
-                <li><a href="logout.php">Logout</a></li>
+            <li><a href="admin.php">Dashboard</a></li>
+            <li><a href="OrderManagement.php">Order Management</a></li>
+            <li><a href="ProductManagement.php">Product Management</a></li>
+            <li><a href="Categories.php">Categories</a></li>
+            <li><a href="RefundAndRatings.php">Refund & Ratings</a></li>
+            <li><a href="logout.php">Logout</a></li>
             </ul>
         </nav>
         <main class="admin-main">

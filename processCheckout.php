@@ -18,18 +18,13 @@ $cart_items = $_POST['cart_items'];
 $conn->begin_transaction();
 
 try {
-    // Insert into orders table
-    $query = "INSERT INTO orders (user_id, total, status, created_at, updated_at) VALUES (?, ?, 'pending', NOW(), NOW())";
+    // Insert into orders table with shipping details
+    $query = "INSERT INTO orders (user_id, total, status, created_at, updated_at, shipping_address, shipping_city, shipping_postal_code, shipping_country) 
+              VALUES (?, ?, 'pending', NOW(), NOW(), ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('id', $user_id, $total_price);
+    $stmt->bind_param('idssss', $user_id, $total_price, $shipping_address, $shipping_city, $shipping_postal_code, $shipping_country);
     $stmt->execute();
     $order_id = $stmt->insert_id;
-
-    // Insert into order_shipping table
-    $query = "INSERT INTO order_shipping (order_id, address, city, postal_code, country) VALUES (?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('issss', $order_id, $shipping_address, $shipping_city, $shipping_postal_code, $shipping_country);
-    $stmt->execute();
 
     // Insert into order_items table and update cart_items status
     foreach ($cart_items as $product_id => $quantity) {

@@ -2,57 +2,7 @@
 <html>
 <head>
     <title>Shopping Cart</title>
-    <style>
-body {
-    background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
-}
-.cart-container {
-    max-width: 800px;
-    margin: 170px auto;
-    background: white;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-.cart-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-.cart-item {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.cart-item:last-child {
-    border-bottom: none;
-}
-.item-details {
-    flex-grow: 1;
-}
-.item-price, .quantity-controls {
-    margin-left: 20px;
-    font-weight: bold;
-}
-.total-price {
-    text-align: right;
-    margin-top: 20px;
-    font-size: 1.2em;
-    font-weight: bold;
-}
-button {
-    padding: 8px 16px;
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-button:hover {
-    background-color: #003580;
-}
-</style>
+    <link rel="stylesheet" href="css/viewCart.css">
 
 </head>
 <body>
@@ -62,7 +12,20 @@ button:hover {
     include 'header.php';
 
     if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-        echo "<p>Please log in to view your cart.</p>";
+        echo '
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Login Required</title>
+            <link rel="stylesheet" href="css/login-message.css">
+        </head>
+        <body>
+            <div class="login-message">
+                <p>Please log in to view your cart.</p>
+                <a href="login.php">Login</a>
+            </div>
+        </body>
+        </html>';
         include 'footer.php';
         exit;
     }

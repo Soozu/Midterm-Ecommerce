@@ -1,0 +1,174 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.admin-container {
+    display: flex;
+    height: 100vh;
+}
+
+.admin-sidebar {
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+}
+
+.admin-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-sidebar ul li {
+    padding: 20px;
+}
+
+.admin-sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.admin-sidebar ul li a:hover {
+    background-color: #555;
+}
+
+.admin-main {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.admin-header {
+    margin-bottom: 20px;
+}
+
+.admin-button {
+    margin-bottom: 20px;
+}
+
+.admin-orders .table-container {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    background: white;
+}
+
+.admin-orders table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-orders th, .admin-orders td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.admin-orders th {
+    background-color: #333;
+    color: white;
+}
+
+.admin-orders td img {
+    display: block;
+    margin: 0 auto;
+}
+
+.admin-button, .admin-button-delete, .admin-button-add-stock {
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: inline-block;
+    width: 70px;
+    margin-right: 5px;
+}
+
+.admin-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.admin-button-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.admin-button-add-stock {
+    background-color: #28a745;
+    color: white;
+}
+
+.admin-button:hover, .admin-button-delete:hover, .admin-button-add-stock:hover {
+    opacity: 0.8;
+}
+
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
+}
+
+.popup.active, .popup-overlay.active {
+    display: block;
+}
+
+.popup h2 {
+    margin-top: 0;
+}
+
+.popup form {
+    display: flex;
+    flex-direction: column;
+}
+
+.popup form label {
+    margin-bottom: 5px;
+}
+
+.popup form input, .popup form select, .popup form textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.popup form button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    margin-top: 10px;
+}
+
+.popup form button[type="button"] {
+    background-color: #6c757d;
+}
+
+.popup form button:hover {
+    opacity: 0.8;
+}

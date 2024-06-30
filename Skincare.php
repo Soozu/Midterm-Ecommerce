@@ -1,64 +1,69 @@
 <?php
 session_start();
-include 'db.php';  // Ensure this path is correct
+include 'db.php';
+include 'header.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    $_SESSION['login_required'] = true;  // Set a session variable
-    header("Location: login.php");  // Redirect to the login page
+    echo '
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Login Required</title>
+        <link rel="stylesheet" href="css/login-message.css">
+    </head>
+    <body>
+        <div class="login-message">
+            <p>Please log in to view your cart.</p>
+            <a href="login.php">Login</a>
+        </div>
+    </body>
+    </html>';
     exit;
 }
 
-// Fetch makeup products from the database
-$query = "SELECT * FROM products WHERE category_id = 1";  // Assuming '1' is the ID for Makeup
+// Fetch products from the database
+$query = "SELECT p.*, IFNULL(AVG(r.rating), 0) as avg_rating, COUNT(r.id) as num_sold FROM products p LEFT JOIN ratings r ON p.id = r.product_id WHERE category_id = 2 GROUP BY p.id"; // Assuming 1 is the category_id for Makeup
 $result = $conn->query($query);
-
-include 'header.php';  // Adjust the path as needed
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skincare Products - Coming Soon</title>
-    <link rel="stylesheet" href="css/styles.css"> <!-- Assuming you have a styles.css file -->
-    <style>
-        /* Additional styling for the coming soon page */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f5f5f5; /* Light background color */
-            font-family: Arial, sans-serif;
-        }
-
-        .coming-soon-container {
-            text-align: center;
-            background-color: #fff;
-            padding: 50px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .coming-soon-container h1 {
-            font-size: 2.5em;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .coming-soon-container p {
-            font-size: 1.2em;
-            color: #666;
-        }
-    </style>
+    <title>Skin Care Products</title>
+    <link rel="stylesheet" href="css/makeup.css">
 </head>
 <body>
-    <div class="coming-soon-container">
-        <h1>Skincare Products</h1>
-        <p>Coming Soon...</p>
-    </div>
+    <h1>Skin Care Products</h1>
+    <section class="products">
+        <div id="products-container" class="product-grid">
+            <?php if ($result->num_rows > 0): ?>
+                <?php while($product = $result->fetch_assoc()): ?>
+                    <div class="product">
+                        <figure>
+                            <img src="img/<?= htmlspecialchars($product['image']); ?>" alt="<?= htmlspecialchars($product['name']); ?>" onclick="window.location.href='product.php?id=<?= $product['id']; ?>'">
+                        </figure>
+                        <h3><?= htmlspecialchars($product['name']); ?></h3>
+                        <p class="price">₱<?= number_format($product['price'], 2); ?></p>
+                        <div class="rating">
+                            <?php
+                            $rating = round($product['avg_rating']);
+                            for ($i = 0; $i < 5; $i++) {
+                                if ($i < $rating) {
+                                    echo '<span class="star filled">★</span>';
+                                } else {
+                                    echo '<span class="star">☆</span>';
+                                }
+                            }
+                            ?>
+                            <span class="sold">Sold: <?= $product['num_sold']; ?></span>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <p>No products found.</p>
+            <?php endif; ?>
+        </div>
+    </section>
 </body>
 </html>
-

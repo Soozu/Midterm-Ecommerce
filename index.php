@@ -1,101 +1,170 @@
 <?php
 session_start();
-include 'db.php'; // Ensure this path is correct
-include 'header.php'; // Include header
+include 'db.php';
+include 'header.php';
 
-// Fetch all active products from the database
-$query = "SELECT * FROM products WHERE status = 'active'";
-$result = $conn->query($query);
+// Fetch 4 random Makeup products
+$makeup_query = "SELECT products.*, COALESCE(SUM(order_items.quantity), 0) AS sold, COALESCE(AVG(ratings.rating), 0) AS rating
+                 FROM products
+                 LEFT JOIN order_items ON products.id = order_items.product_id
+                 LEFT JOIN ratings ON products.id = ratings.product_id
+                 WHERE category_id = 1
+                 GROUP BY products.id
+                 ORDER BY RAND()
+                 LIMIT 4";
+$makeup_result = $conn->query($makeup_query);
+if (!$makeup_result) {
+    die("Makeup query failed: " . $conn->error);
+}
+
+// Fetch 4 random Skincare products
+$skincare_query = "SELECT products.*, COALESCE(SUM(order_items.quantity), 0) AS sold, COALESCE(AVG(ratings.rating), 0) AS rating
+                   FROM products
+                   LEFT JOIN order_items ON products.id = order_items.product_id
+                   LEFT JOIN ratings ON products.id = ratings.product_id
+                   WHERE category_id = 2
+                   GROUP BY products.id
+                   ORDER BY RAND()
+                   LIMIT 4";
+$skincare_result = $conn->query($skincare_query);
+if (!$skincare_result) {
+    die("Skincare query failed: " . $conn->error);
+}
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Name</title>
-    <link rel="stylesheet" href="css/styles.css">
-    
+    <title>Home</title>
+    <link rel="stylesheet" href="css/index.css">
+
 </head>
 <body>
-<main>
-<!-- Main Content -->
-<div class="main-content">
-    <!-- Banner with slides -->
-    <div class="banner">
-        <div class="slide fade">
-            <img src="img/item1.jpg" alt="Banner Image 1">
+    <!-- Slideshow container -->
+    <div class="slideshow-container">
+
+        <div class="mySlides fade">
+            <div class="numbertext">1 / 3</div>
+            <img src="img/Brushes(product1).jpeg" style="width:100%; height:400px;">
+            <div class="text">Caption Text</div>
         </div>
-        <div class="slide fade">
-            <img src="img/item2.jpg" alt="Banner Image 2">
+
+        <div class="mySlides fade">
+            <div class="numbertext">2 / 3</div>
+            <img src="img/Lipstick(product7).jpeg" style="width:100%; height:400px;">
+            <div class="text">Caption Two</div>
         </div>
-        <div class="slide fade">
-            <img src="img/item3.jpg" alt="Banner Image 3">
+
+        <div class="mySlides fade">
+            <div class="numbertext">3 / 3</div>
+            <img src="img/MilkyBleachingWhippedCream(product5).jpeg" style="width:100%; height:400px;">
+            <div class="text">Caption Three</div>
         </div>
-        <div class="slide fade">
-            <img src="img/item4.jpg" alt="Banner Image 4">
-        </div>
+
+        <!-- Next and previous buttons -->
         <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
         <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+    </div>
+    <br>
+
+    <!-- The dots/circles -->
+    <div style="text-align:center">
+        <span class="dot" onclick="currentSlide(1)"></span> 
+        <span class="dot" onclick="currentSlide(2)"></span> 
+        <span class="dot" onclick="currentSlide(3)"></span> 
     </div>
 
-    <h1 align="center">Products</h1>
-    <section class="products">
-        <h1>Products</h1>
-        <div id="products-container" class="product-grid">
-            <?php if ($result->num_rows > 0): ?>
-                <?php while($product = $result->fetch_assoc()): ?>
-                    <?php $isInStock = $product['stock_quantity'] > 0; ?>
-                    <div class="product">
-                        <figure>
-                            <img src="img/<?= htmlspecialchars($product['image']); ?>" alt="<?= htmlspecialchars($product['name']); ?>">
-                            <figcaption>
-                                <span class="description-short"><?= htmlspecialchars(substr($product['description'], 0, 100)); ?>...</span>
-                                <span class="description-full"><?= htmlspecialchars($product['description']); ?></span>
-                                <span class="read-more">Read More</span>
-                            </figcaption>
-                        </figure>
-                        <h3><?= htmlspecialchars($product['name']); ?></h3>
-                        <p class="price">₱<?= number_format($product['price'], 2); ?></p>
-                        <p class="stock"><?= $isInStock ? "Stock: " . $product['stock_quantity'] : "<span style='color: red;'>Out of Stock</span>"; ?></p>
-                        <?php if ($isInStock): ?>
-                            <a href="addToCart.php?product_id=<?= $product['id']; ?>" class="button">Add to Cart</a>
-                            <a href="addToCart.php?product_id=<?= $product['id']; ?>&checkout=true" class="button">Buy Now</a>
-                        <?php else: ?>
-                            <button disabled class="button out-of-stock">Out of Stock</button>
-                        <?php endif; ?>
+    <div class="products">
+        <h1>Makeup</h1>
+        <div class="product-grid">
+            <?php while ($product = $makeup_result->fetch_assoc()): ?>
+                <div class="product">
+                    <a href="product.php?id=<?= $product['id'] ?>">
+                        <img src="img/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+                    </a>
+                    <h3><?= htmlspecialchars($product['name']) ?></h3>
+                    <div class="price">₱<?= number_format($product['price'], 2) ?></div>
+                    <div class="rating">
+                        <?php
+                        $rating = round($product['rating']);
+                        for ($i = 0; $i < 5; $i++) {
+                            if ($i < $rating) {
+                                echo '<span class="star filled">★</span>';
+                            } else {
+                                echo '<span class="star">☆</span>';
+                            }
+                        }
+                        ?>
+                        <span class="sold">Sold: <?= $product['sold'] ?></span>
+                        <span class="stock">Stock: <?= $product['stock_quantity'] ?></span>
                     </div>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <p>No products found.</p>
-            <?php endif; ?>
+                </div>
+            <?php endwhile; ?>
         </div>
-    </section>
-</div>
+    </div>
 
-</main>
-<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const readMoreLinks = document.querySelectorAll('.read-more');
-            readMoreLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    const shortDescription = this.previousElementSibling.previousElementSibling;
-                    const fullDescription = this.previousElementSibling;
-                    if (fullDescription.style.display === 'none') {
-                        shortDescription.style.display = 'none';
-                        fullDescription.style.display = 'block';
-                        this.textContent = 'Read Less';
-                    } else {
-                        shortDescription.style.display = 'block';
-                        fullDescription.style.display = 'none';
-                        this.textContent = 'Read More';
-                    }
-                });
-            });
-        });
+    <div class="products">
+        <h1>Skincare</h1>
+        <div class="product-grid">
+            <?php while ($product = $skincare_result->fetch_assoc()): ?>
+                <div class="product">
+                    <a href="product.php?id=<?= $product['id'] ?>">
+                        <img src="img/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+                    </a>
+                    <h3><?= htmlspecialchars($product['name']) ?></h3>
+                    <div class="price">₱<?= number_format($product['price'], 2) ?></div>
+                    <div class="rating">
+                        <?php
+                        $rating = round($product['rating']);
+                        for ($i = 0; $i < 5; $i++) {
+                            if ($i < $rating) {
+                                echo '<span class="star filled">★</span>';
+                            } else {
+                                echo '<span class="star">☆</span>';
+                            }
+                        }
+                        ?>
+                        <span class="sold">Sold: <?= $product['sold'] ?></span>
+                        <span class="stock">Stock: <?= $product['stock_quantity'] ?></span>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+        </div>
+    </div>
+
+    <script>
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            let dots = document.getElementsByClassName("dot");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}    
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex-1].style.display = "block";  
+            dots[slideIndex-1].className += " active";
+            setTimeout(showSlides, 2000); // Change image every 2 seconds
+        }
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
     </script>
-
-<script src="cart.js"></script> <!-- Script for cart functionality -->
-<script src="slideshow.js"></script> <!-- Script for banner slide show -->
 </body>
+<?php
+include 'footer.php';
+?>
+
 </html>
-<?php include 'footer.php'; ?>
