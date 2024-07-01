@@ -11,26 +11,16 @@ $user_id = $_SESSION['id'];
 $order_id = $_GET['order_id'];
 $product_id = $_GET['product_id'];
 
-$query = "SELECT * FROM orders WHERE id = ? AND user_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('ii', $order_id, $user_id);
-$stmt->execute();
-$order = $stmt->get_result()->fetch_assoc();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $reason = $_POST['reason'];
 
-if (!$order) {
-    echo "Order not found.";
-    exit;
-}
-
-$query = "SELECT * FROM products WHERE id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('i', $product_id);
-$stmt->execute();
-$product = $stmt->get_result()->fetch_assoc();
-
-if (!$product) {
-    echo "Product not found.";
-    exit;
+    $stmt = $conn->prepare("INSERT INTO refunds (user_id, product_id, order_id, reason, status) VALUES (?, ?, ?, ?, 'pending')");
+    $stmt->bind_param("iiis", $user_id, $product_id, $order_id, $reason);
+    if ($stmt->execute()) {
+        header('Location: Order.php');
+    } else {
+        echo "Error: " . $stmt->error;
+    }
 }
 ?>
 
@@ -38,15 +28,13 @@ if (!$product) {
 <html>
 <head>
     <title>Request Refund</title>
-    <link rel="stylesheet" href="css/requestRefund.css">
+    <link rel="stylesheet" href="css/refundRating.css">
 </head>
 <body>
-<div class="request-refund-container">
-    <h1>Request Refund for: <?= htmlspecialchars($product['name']); ?></h1>
-    <form action="submitRefund.php" method="POST">
-        <input type="hidden" name="order_id" value="<?= htmlspecialchars($order_id); ?>">
-        <input type="hidden" name="product_id" value="<?= htmlspecialchars($product_id); ?>">
-        <label for="reason">Reason for Refund:</label>
+<div class="form-container">
+    <h2>Request Refund</h2>
+    <form action="requestRefund.php?order_id=<?= $order_id ?>&product_id=<?= $product_id ?>" method="POST">
+        <label for="reason">Reason for refund:</label>
         <textarea id="reason" name="reason" rows="4" required></textarea>
         <button type="submit">Submit Refund Request</button>
     </form>

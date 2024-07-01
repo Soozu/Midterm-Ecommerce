@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'])) {
         $stmt->execute();
 
         // Setup PHPMailer and send the reset link
-        $resetLink = "http://localhost:8080/Midterm/reset-password.php?token=$token";
+        $resetLink = "http://localhost:8080/Midterm/Midterm-Ecommerce/reset-password.php?token=$token";
         $mail = new PHPMailer(true);
 
         try {

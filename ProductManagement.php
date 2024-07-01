@@ -25,10 +25,12 @@ $result = $conn->query($query);
 <div class="admin-container">
     <div class="admin-sidebar">
         <ul>
-            <li><a href="admin.php">Dashboard</a></li>
+        <li><a href="admin.php">Dashboard</a></li>
             <li><a href="OrderManagement.php">Order Management</a></li>
             <li><a href="ProductManagement.php">Product Management</a></li>
             <li><a href="Categories.php">Categories</a></li>
+            <li><a href="RefundAndRatings.php">Refund & Ratings</a></li>
+            <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>
     <div class="admin-main">

@@ -11,26 +11,17 @@ $user_id = $_SESSION['id'];
 $order_id = $_GET['order_id'];
 $product_id = $_GET['product_id'];
 
-$query = "SELECT * FROM orders WHERE id = ? AND user_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('ii', $order_id, $user_id);
-$stmt->execute();
-$order = $stmt->get_result()->fetch_assoc();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $rating = $_POST['rating'];
+    $comment = $_POST['comment'];
 
-if (!$order) {
-    echo "Order not found.";
-    exit;
-}
-
-$query = "SELECT * FROM products WHERE id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('i', $product_id);
-$stmt->execute();
-$product = $stmt->get_result()->fetch_assoc();
-
-if (!$product) {
-    echo "Product not found.";
-    exit;
+    $stmt = $conn->prepare("INSERT INTO ratings (user_id, product_id, rating, comment) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("iiis", $user_id, $product_id, $rating, $comment);
+    if ($stmt->execute()) {
+        header('Location: Order.php');
+    } else {
+        echo "Error: " . $stmt->error;
+    }
 }
 ?>
 
@@ -38,14 +29,12 @@ if (!$product) {
 <html>
 <head>
     <title>Rate Product</title>
-    <link rel="stylesheet" href="css/rateProduct.css">
+    <link rel="stylesheet" href="css/refundRating.css">
 </head>
 <body>
-<div class="rate-product-container">
-    <h1>Rate Product: <?= htmlspecialchars($product['name']); ?></h1>
-    <form action="submitRating.php" method="POST">
-        <input type="hidden" name="order_id" value="<?= htmlspecialchars($order_id); ?>">
-        <input type="hidden" name="product_id" value="<?= htmlspecialchars($product_id); ?>">
+<div class="form-container">
+    <h2>Rate Product</h2>
+    <form action="rateProduct.php?order_id=<?= $order_id ?>&product_id=<?= $product_id ?>" method="POST">
         <label for="rating">Rating:</label>
         <select id="rating" name="rating" required>
             <option value="1">1 Star</option>

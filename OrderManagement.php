@@ -21,8 +21,8 @@ function updateOrderStatus($conn, $orderId, $status) {
         // Check if the order is delivered
         if ($status === 'delivered') {
             // Insert the delivered order into the delivered_orders table
-            $query = "INSERT INTO delivered_orders (order_id, user_id, total, status, created_at, updated_at, shipping_address, shipping_city, shipping_postal_code, shipping_country)
-                      SELECT id, user_id, total, 'delivered', created_at, updated_at, shipping_address, shipping_city, shipping_postal_code, shipping_country
+            $query = "INSERT INTO delivered_orders (user_id, total, status, created_at, updated_at, shipping_address, shipping_city, shipping_postal_code, shipping_country)
+                      SELECT user_id, total, 'delivered', created_at, updated_at, shipping_address, shipping_city, shipping_postal_code, shipping_country
                       FROM orders WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->bind_param('i', $orderId);
@@ -71,7 +71,7 @@ $result = $conn->query($query);
 <div class="admin-container">
     <div class="admin-sidebar">
         <ul>
-        <li><a href="admin.php">Dashboard</a></li>
+            <li><a href="admin.php">Dashboard</a></li>
             <li><a href="OrderManagement.php">Order Management</a></li>
             <li><a href="ProductManagement.php">Product Management</a></li>
             <li><a href="Categories.php">Categories</a></li>
@@ -111,7 +111,7 @@ $result = $conn->query($query);
                                 <input type="hidden" name="order_id" value="<?= $row['id'] ?>">
                                 <select name="status">
                                     <option value="pending" <?= $row['status'] === 'pending' ? 'selected' : '' ?>>Pending</option>
-                                    <option value="in_transit" <?= $row['status'] === 'in_transit' ? 'selected' : '' ?>>in_transit</option>
+                                    <option value="in_transit" <?= $row['status'] === 'in_transit' ? 'selected' : '' ?>>In Transit</option>
                                     <option value="shipped" <?= $row['status'] === 'shipped' ? 'selected' : '' ?>>Shipped</option>
                                     <option value="delivered" <?= $row['status'] === 'delivered' ? 'selected' : '' ?>>Delivered</option>
                                 </select>
