@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 30, 2024 at 05:14 PM
+-- Generation Time: Jul 02, 2024 at 04:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,7 +44,10 @@ INSERT INTO `cart_items` (`id`, `user_id`, `product_id`, `quantity`, `added_at`,
 (73, 5, 27, 1, '2024-06-30 13:54:57', 'purchased'),
 (74, 5, 27, 1, '2024-06-30 13:55:27', 'purchased'),
 (75, 1, 28, 1, '2024-06-30 13:56:42', 'purchased'),
-(76, 1, 29, 1, '2024-06-30 14:09:05', 'purchased');
+(76, 1, 29, 1, '2024-06-30 14:09:05', 'purchased'),
+(77, 1, 30, 1, '2024-07-01 08:25:55', 'purchased'),
+(78, 1, 31, 1, '2024-07-01 08:33:20', 'purchased'),
+(79, 1, 28, 1, '2024-07-01 22:49:59', '');
 
 -- --------------------------------------------------------
 
@@ -74,31 +77,23 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 
 CREATE TABLE `delivered_orders` (
   `id` int(11) NOT NULL,
-  `order_id` int(11) DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
-  `total` decimal(10,2) NOT NULL,
-  `status` varchar(50) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `total` decimal(10,2) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `shipping_address` varchar(255) NOT NULL,
-  `shipping_city` varchar(100) NOT NULL,
-  `shipping_postal_code` varchar(20) NOT NULL,
-  `shipping_country` varchar(100) NOT NULL
+  `shipping_address` varchar(255) DEFAULT NULL,
+  `shipping_city` varchar(100) DEFAULT NULL,
+  `shipping_postal_code` varchar(20) DEFAULT NULL,
+  `shipping_country` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `delivered_orders`
 --
 
-INSERT INTO `delivered_orders` (`id`, `order_id`, `user_id`, `total`, `status`, `created_at`, `updated_at`, `shipping_address`, `shipping_city`, `shipping_postal_code`, `shipping_country`) VALUES
-(45, 31, 1, 55.00, 'delivered', '2024-06-30 09:38:08', '2024-06-30 09:40:20', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
-(46, 30, 4, 199.00, 'delivered', '2024-06-30 08:08:31', '2024-06-30 08:10:01', 'sda', 'asd', 'asd', 'sd'),
-(47, 29, 4, 295.00, 'delivered', '2024-06-30 06:52:36', '2024-06-30 13:56:14', '', '', '', ''),
-(48, 32, 5, 299.00, 'delivered', '2024-06-30 13:55:05', '2024-06-30 13:56:16', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
-(49, 33, 5, 299.00, 'delivered', '2024-06-30 13:55:36', '2024-06-30 13:56:18', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
-(50, 30, 4, 199.00, 'delivered', '2024-06-30 08:08:31', '2024-06-30 08:10:01', 'sda', 'asd', 'asd', 'sd'),
-(51, 34, 1, 149.00, 'delivered', '2024-06-30 13:56:46', '2024-06-30 13:57:00', '123', '123', '123', '123'),
-(52, 35, 1, 479.00, 'delivered', '2024-06-30 14:09:11', '2024-06-30 14:09:58', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES');
+INSERT INTO `delivered_orders` (`id`, `user_id`, `total`, `status`, `created_at`, `updated_at`, `shipping_address`, `shipping_city`, `shipping_postal_code`, `shipping_country`) VALUES
+(2, 1, 249.00, 'delivered', '2024-07-01 08:33:26', '2024-07-01 08:33:53', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES');
 
 -- --------------------------------------------------------
 
@@ -119,10 +114,7 @@ CREATE TABLE `delivered_order_items` (
 --
 
 INSERT INTO `delivered_order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
-(31, 48, 27, 1, 299.00),
-(32, 49, 27, 1, 299.00),
-(33, 51, 28, 1, 149.00),
-(34, 52, 29, 1, 479.00);
+(2, 2, 31, 1, 249.00);
 
 -- --------------------------------------------------------
 
@@ -134,7 +126,7 @@ CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `total` decimal(10,2) NOT NULL,
-  `status` enum('pending','shipped','in_transit','delivered') NOT NULL DEFAULT 'pending',
+  `status` enum('pending','shipped','in_transit','delivered','paid','Cancel Order','refund item') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `shipping_address` varchar(255) NOT NULL,
@@ -148,15 +140,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `total`, `status`, `created_at`, `updated_at`, `shipping_address`, `shipping_city`, `shipping_postal_code`, `shipping_country`) VALUES
-(27, 4, 199.00, 'delivered', '2024-06-30 06:29:20', '2024-06-30 10:18:17', '', '', '', ''),
-(28, 4, 597.00, 'delivered', '2024-06-30 06:41:52', '2024-06-30 06:54:25', '', '', '', ''),
-(29, 4, 295.00, 'delivered', '2024-06-30 06:52:36', '2024-06-30 13:56:14', '', '', '', ''),
-(30, 4, 199.00, 'delivered', '2024-06-30 08:08:31', '2024-06-30 08:10:01', 'sda', 'asd', 'asd', 'sd'),
-(31, 1, 55.00, 'delivered', '2024-06-30 09:38:08', '2024-06-30 09:40:20', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
-(32, 5, 299.00, 'delivered', '2024-06-30 13:55:05', '2024-06-30 13:56:16', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
-(33, 5, 299.00, 'delivered', '2024-06-30 13:55:36', '2024-06-30 13:56:18', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
-(34, 1, 149.00, 'delivered', '2024-06-30 13:56:46', '2024-06-30 13:57:00', '123', '123', '123', '123'),
-(35, 1, 479.00, 'delivered', '2024-06-30 14:09:11', '2024-06-30 14:09:58', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES');
+(37, 1, 249.00, 'delivered', '2024-07-01 08:33:26', '2024-07-01 08:33:53', 'BACOOR', 'CAVITE', '4102', 'PHILIPPINES'),
+(38, 1, 149.00, 'paid', '2024-07-01 22:50:06', '2024-07-01 22:51:43', 'BACOOR', '123', '123', '123');
 
 -- --------------------------------------------------------
 
@@ -177,10 +162,8 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
-(24, 32, 27, 1, 299.00),
-(25, 33, 27, 1, 299.00),
-(26, 34, 28, 1, 149.00),
-(27, 35, 29, 1, 479.00);
+(29, 37, 31, 1, 249.00),
+(30, 38, 28, 1, 149.00);
 
 -- --------------------------------------------------------
 
@@ -229,7 +212,12 @@ INSERT INTO `password_resets` (`id`, `user_id`, `token`, `expires_at`) VALUES
 (12, 1, '03cd1ac2e3e563ecece7ee1626b44470390e201e56cd365f5212d82ce4db2deac3d7b994e89701e82b49e15fd09943ec796a', '2024-06-11 19:51:03'),
 (13, 1, '156b83c552fa67bdeeaa179f12c02b97b114bf3d6e6413a5de81b34a68f3a208f0d613eff27688bb4f30ba3b0dca6fd1c3b5', '2024-06-11 19:51:27'),
 (16, 1, 'b070931938b24043ca216941e3492ce6f61da5238f09d01695909ea45286a7a4fa149bc07a8ed64f82f87edc49c5071bce6b', '2024-06-12 08:39:37'),
-(18, 1, 'c29bc8c0a8b3535d861921220b965426717dcc184d93158494feb00c2e7a28298d2189d374848e6380f52a8eb361496c0a70', '2024-06-16 13:36:58');
+(18, 1, 'c29bc8c0a8b3535d861921220b965426717dcc184d93158494feb00c2e7a28298d2189d374848e6380f52a8eb361496c0a70', '2024-06-16 13:36:58'),
+(19, 1, 'eafba72dc36435e47c048f136250fe7e4449593c33a3958ec42d11a38a6335c568b0689e1d126db736c945b6775969670ee8', '2024-07-01 18:42:26'),
+(20, 1, 'e5b91b593e8dc4fda2dc10acd96597edc8d12bcf60863b351b018b603a1e0c037233368d2faa92980d0a16f1cef7e7421f26', '2024-07-01 18:46:16'),
+(21, 1, 'cfdc74ee6f30e6685c7492746b560ae3f466bc53a5cb6b212922eed79740810d4be15a783f0603d29549a32b21ba177109f4', '2024-07-01 18:46:59'),
+(22, 1, 'a8999ee0c6846865e132782823fb8f2a1e854c38cfb4716d69ebdb7bf9eb27c424fd0c35dd3243330fadb9f7afd3471eb110', '2024-07-01 18:53:19'),
+(23, 1, 'd75f0519dd517087611b44a0d20bb2e93e2a8e5475e7fdf5adc04e1826a554be7da3492ba3ccc873bed01f6e7438edce8570', '2024-07-01 18:55:05');
 
 -- --------------------------------------------------------
 
@@ -257,13 +245,13 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `category_id`, `image`, `stock_quantity`, `status`, `created_at`, `updated_at`, `avg_rating`, `num_sold`) VALUES
-(27, 'Brushes', 'Tools used to apply makeup products. They come in various shapes and sizes, each designed for specific tasks like applying foundation, blending eye shadow, or contouring.', 299.00, 1, 'Brushes(product1).jpeg', 18, NULL, '2024-06-30 11:33:21', '2024-06-30 13:55:27', 0, 0),
-(28, 'Mascara', 'A cosmetic used to enhance the eyelashes by darkening, lengthening, and thickening them. It is available in different formulas like waterproof and volumizing.', 149.00, 1, 'Mascara(product8).jpeg', 19, NULL, '2024-06-30 11:35:14', '2024-06-30 13:56:42', 0, 0),
-(29, 'Lip Gloss', 'A shiny, often translucent cosmetic applied to the lips for a glossy finish. It can be worn alone or over lipstick for added shine.', 479.00, 1, 'LipGloss(product5).jpeg', 19, NULL, '2024-06-30 11:35:55', '2024-06-30 14:09:05', 0, 0),
-(30, 'Lip Liner', 'A pencil-like product used to outline the lips, preventing lipstick from feathering and providing a defined shape.', 399.00, 1, 'LipLiner(product6).png', 20, NULL, '2024-06-30 11:36:53', '2024-06-30 11:36:53', 0, 0),
-(31, 'Eye Liner', 'A makeup product used to define the eyes. It can be applied along the lash line or waterline and comes in forms such as pencil, liquid, gel, and powder.', 249.00, 1, 'EyeLiner(product2).png', 20, NULL, '2024-06-30 11:37:43', '2024-06-30 11:37:43', 0, 0),
-(32, 'Lip Stick', 'A cosmetic product applied to the lips to add color and texture. It is available in various finishes like matte, satin, and glossy.', 250.00, 1, 'Lipstick(product7).jpeg', 20, NULL, '2024-06-30 11:38:19', '2024-06-30 11:38:19', 0, 0),
-(33, 'Eye Shadow', 'A cosmetic applied to the eyelids and under the eyes to add color, depth, and dimension. It comes in various forms such as powder, cream, and liquid.', 799.00, 1, 'EyeShadow(product3).jpeg', 200, NULL, '2024-06-30 11:39:01', '2024-06-30 11:39:01', 0, 0),
+(27, 'Brushes', 'Tools used to apply makeup products. They come in various shapes and sizes, each designed for specific tasks like applying foundation, blending eye shadow, or contouring.', 299.00, 1, 'Brushes(product1).jpeg', 18, NULL, '2024-06-30 11:33:21', '2024-07-01 08:22:22', 0, 0),
+(28, 'Mascara', 'A cosmetic used to enhance the eyelashes by darkening, lengthening, and thickening them. It is available in different formulas like waterproof and volumizing.', 149.00, 1, 'Mascara(product8).jpeg', 18, 'active', '2024-06-30 11:35:14', '2024-07-01 22:49:59', 0, 0),
+(29, 'Lip Gloss', 'A shiny, often translucent cosmetic applied to the lips for a glossy finish. It can be worn alone or over lipstick for added shine.', 479.00, 1, 'LipGloss(product5).jpeg', 19, 'active', '2024-06-30 11:35:55', '2024-07-01 08:22:41', 0, 0),
+(30, 'Lip Liner', 'A pencil-like product used to outline the lips, preventing lipstick from feathering and providing a defined shape.', 399.00, 1, 'LipLiner(product6).png', 19, 'active', '2024-06-30 11:36:53', '2024-07-01 08:25:55', 0, 0),
+(31, 'Eye Liner', 'A makeup product used to define the eyes. It can be applied along the lash line or waterline and comes in forms such as pencil, liquid, gel, and powder.', 249.00, 1, 'EyeLiner(product2).png', 19, 'active', '2024-06-30 11:37:43', '2024-07-01 08:33:20', 0, 0),
+(32, 'Lip Stick', 'A cosmetic product applied to the lips to add color and texture. It is available in various finishes like matte, satin, and glossy.', 250.00, 1, 'Lipstick(product7).jpeg', 20, 'active', '2024-06-30 11:38:19', '2024-07-01 08:22:50', 0, 0),
+(33, 'Eye Shadow', 'A cosmetic applied to the eyelids and under the eyes to add color, depth, and dimension. It comes in various forms such as powder, cream, and liquid.', 799.00, 1, 'EyeShadow(product3).jpeg', 200, 'active', '2024-06-30 11:39:01', '2024-07-01 08:22:54', 0, 0),
 (34, 'Foundation Cream', 'A skin-colored makeup applied to the face to create an even, uniform complexion, cover imperfections, and sometimes alter skin tone. It comes in liquid, cream, powder, and stick forms.', 249.00, 1, 'FoundationCream(product4).jpeg', 20, NULL, '2024-06-30 11:39:56', '2024-06-30 11:39:56', 0, 0),
 (35, 'Eye Cream', 'A specialized cream formulated for the delicate skin around the eyes. It targets concerns like puffiness, dark circles, and fine lines, providing hydration and nourishment.', 179.00, 2, 'EyeCream(product1).jpeg', 20, 'active', '2024-06-30 11:40:34', '2024-06-30 11:41:59', 0, 0),
 (36, 'Toner', 'A liquid skincare product used after cleansing to help remove any remaining impurities, balance the skin\'s pH, and prepare the skin for subsequent products like serums and moisturizers.', 329.00, 2, 'Toner(product2).jpeg', 20, NULL, '2024-06-30 11:41:48', '2024-06-30 11:41:48', 0, 0),
@@ -296,7 +284,9 @@ CREATE TABLE `ratings` (
 
 INSERT INTO `ratings` (`id`, `product_id`, `user_id`, `rating`, `comment`, `created_at`, `order_id`) VALUES
 (10, 27, 5, 5, 'Testing', '2024-06-30 13:57:21', 32),
-(11, 29, 1, 5, '123', '2024-06-30 14:10:42', 35);
+(11, 29, 1, 5, '123', '2024-06-30 14:10:42', 35),
+(12, 31, 1, 5, 'coool\r\n', '2024-07-01 08:42:39', 0),
+(13, 31, 1, 4, '123', '2024-07-01 22:59:23', 0);
 
 -- --------------------------------------------------------
 
@@ -306,13 +296,23 @@ INSERT INTO `ratings` (`id`, `product_id`, `user_id`, `rating`, `comment`, `crea
 
 CREATE TABLE `refunds` (
   `id` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL,
-  `reason` text NOT NULL,
-  `status` varchar(50) NOT NULL DEFAULT 'pending',
+  `user_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `reason` text DEFAULT NULL,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `user_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL
+  `order_id` int(11) NOT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `product_image` varchar(255) DEFAULT NULL,
+  `contact_number` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `refunds`
+--
+
+INSERT INTO `refunds` (`id`, `user_id`, `product_id`, `reason`, `status`, `created_at`, `order_id`, `token`, `product_image`, `contact_number`) VALUES
+(22, 1, 31, 'e', 'pending', '2024-07-02 02:33:36', 2, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -375,8 +375,7 @@ ALTER TABLE `categories`
 -- Indexes for table `delivered_orders`
 --
 ALTER TABLE `delivered_orders`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `order_id` (`order_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `delivered_order_items`
@@ -435,7 +434,8 @@ ALTER TABLE `ratings`
 --
 ALTER TABLE `refunds`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `order_id` (`order_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indexes for table `users`
@@ -460,7 +460,7 @@ ALTER TABLE `user_favorites`
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -472,25 +472,25 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `delivered_orders`
 --
 ALTER TABLE `delivered_orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `delivered_order_items`
 --
 ALTER TABLE `delivered_order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `order_shipping`
@@ -502,7 +502,7 @@ ALTER TABLE `order_shipping`
 -- AUTO_INCREMENT for table `password_resets`
 --
 ALTER TABLE `password_resets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -514,13 +514,13 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `ratings`
 --
 ALTER TABLE `ratings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `refunds`
 --
 ALTER TABLE `refunds`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -539,19 +539,11 @@ ALTER TABLE `user_favorites`
 --
 
 --
--- Constraints for table `delivered_orders`
---
-ALTER TABLE `delivered_orders`
-  ADD CONSTRAINT `delivered_orders_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
-
---
 -- Constraints for table `delivered_order_items`
 --
 ALTER TABLE `delivered_order_items`
   ADD CONSTRAINT `delivered_order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `delivered_orders` (`id`),
-  ADD CONSTRAINT `delivered_order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
-  ADD CONSTRAINT `delivered_order_items_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `delivered_orders` (`id`),
-  ADD CONSTRAINT `delivered_order_items_ibfk_4` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
+  ADD CONSTRAINT `delivered_order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 
 --
 -- Constraints for table `orders`
@@ -596,7 +588,8 @@ ALTER TABLE `ratings`
 -- Constraints for table `refunds`
 --
 ALTER TABLE `refunds`
-  ADD CONSTRAINT `refunds_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
+  ADD CONSTRAINT `refunds_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `refunds_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 
 --
 -- Constraints for table `user_favorites`

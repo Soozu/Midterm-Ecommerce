@@ -32,9 +32,188 @@ $avg_rating = $avg_rating_result->fetch_assoc();
 <html>
 <head>
     <title><?= htmlspecialchars($product['name']); ?></title>
-    <link rel="stylesheet" href="css/product.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #000;
+}
+
+.product-container {
+    display: flex;
+    width: 100%;
+    margin: 100px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+    margin-top: 175px;
+    margin-bottom: 10px;
+}
+
+.product-image {
+    flex: 1;
+    margin-right: 20px;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-image img {
+    max-width: 100%;
+    border-radius: 8px;
+    width: 250px;
+    height: 250px;
+}
+
+.product-details {
+    flex: 2;
+    max-width: 100%;
+}
+
+.product-title {
+    font-size: 32px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.product-rating .stars {
+    display: flex;
+    margin-right: 10px;
+}
+
+.product-rating .stars .star {
+    font-size: 1.5em;
+    color: #f39c12;
+}
+
+.product-rating .stars .star.empty {
+    color: #ccc;
+}
+
+.product-rating .rating-count {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.product-rating .sold-count {
+    color: #999;
+    font-size: 1.2em;
+}
+
+.product-price {
+    font-size: 36px;
+    color: #e74c3c;
+    margin-bottom: 20px;
+}
+
+.product-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.product-actions a {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.product-actions .button {
+    background-color: #3498db;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.product-actions .button:hover {
+    background-color: #2980b9;
+}
 
 
+.comments-section, .add-comment {
+    width: 50%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.comments-section .comment {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.comments-section .comment .stars {
+    display: flex;
+}
+
+.comments-section .comment .star {
+    font-size: 1em;
+    color: #ccc;
+}
+
+.comments-section .comment .star.filled {
+    color: #f39c12;
+}
+
+.add-comment form {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-comment label {
+    margin: 10px 0 5px;
+    color: #333;
+}
+
+.add-comment textarea {
+    padding: 10px;
+    margin: 5px 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #000;
+}
+
+.add-comment input[type="submit"] {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.add-comment input[type="submit"]:hover {
+    background-color: #555;
+}
+
+    </style>
 </head>
 <body>
     <div class="product-container">
@@ -56,8 +235,8 @@ $avg_rating = $avg_rating_result->fetch_assoc();
             </div>
             <div class="product-price">₱<?= number_format($product['price'], 2); ?></div>
             <div class="product-actions">
-            <a href="addToCart.php?product_id=<?= $product['id']; ?>" class="button">Add to Cart</a>
-            <a href="addToCart.php?product_id=<?= $product['id']; ?>&checkout=true" class="button">Buy Now</a>
+                <a href="addToCart.php?product_id=<?= $product['id']; ?>" class="button">Add to Cart</a>
+                <a href="addToCart.php?product_id=<?= $product['id']; ?>&checkout=true" class="button" style="background-color: #e74c3c;">Buy Now</a>
             </div>
         </div>
     </div>

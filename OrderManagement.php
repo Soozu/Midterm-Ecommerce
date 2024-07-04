@@ -111,6 +111,7 @@ $result = $conn->query($query);
                                 <input type="hidden" name="order_id" value="<?= $row['id'] ?>">
                                 <select name="status">
                                     <option value="pending" <?= $row['status'] === 'pending' ? 'selected' : '' ?>>Pending</option>
+                                    <option value="paid" <?= $row['status'] === 'paid' ? 'selected' : '' ?>>Paid</option>
                                     <option value="in_transit" <?= $row['status'] === 'in_transit' ? 'selected' : '' ?>>In Transit</option>
                                     <option value="shipped" <?= $row['status'] === 'shipped' ? 'selected' : '' ?>>Shipped</option>
                                     <option value="delivered" <?= $row['status'] === 'delivered' ? 'selected' : '' ?>>Delivered</option>

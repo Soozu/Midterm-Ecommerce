@@ -50,7 +50,7 @@ while ($item = $cart_result->fetch_assoc()) {
             </div>
             <div class="checkout-section">
                 <h3>Shipping Information</h3>
-                <form method="POST" action="processCheckout.php">
+                <form id="checkoutForm" method="POST" action="processCheckout.php">
                     <label for="shipping_address">Shipping Address:</label>
                     <input type="text" id="shipping_address" name="shipping_address" required>
                     <label for="shipping_city">City:</label>
@@ -60,60 +60,91 @@ while ($item = $cart_result->fetch_assoc()) {
                     <label for="shipping_country">Country:</label>
                     <input type="text" id="shipping_country" name="shipping_country" required>
                     <h3>Payment Information</h3>
-                    <p>Payment Method: Cash On Delivery</p>
+                    <p>Payment Method: QR Code Payment</p>
                     <input type="hidden" name="total_price" value="<?= $total_price; ?>">
                     <?php foreach ($cart_items as $item): ?>
                         <input type="hidden" name="cart_items[<?= $item['product_id']; ?>]" value="<?= $item['quantity']; ?>">
                     <?php endforeach; ?>
-                    <input type="submit" value="Place Order">
+                    <button type="button" onclick="validateForm()">Place Order</button>
                 </form>
             </div>
         </div>
-        <div class="order-summary uk-card uk-card-default uk-card-small tm-ignore-container">
-            <section class="uk-card-body">
+        <div class="order-summary">
+            <section class="order-summary-body">
                 <h4>Items in order</h4>
                 <?php foreach ($cart_items as $item): ?>
-                <div class="uk-grid-small" uk-grid>
-                    <div class="uk-width-expand">
-                        <div class="uk-text-small"><?= htmlspecialchars($item['name']); ?></div>
-                        <div class="uk-text-meta"><?= $item['quantity']; ?> × ₱<?= number_format($item['price'], 2); ?></div>
-                    </div>
-                    <div class="uk-text-right">
-                        <div>₱<?= number_format($item['price'] * $item['quantity'], 2); ?></div>
-                    </div>
+                <div class="order-summary-item">
+                    <div><?= htmlspecialchars($item['name']); ?></div>
+                    <div><?= $item['quantity']; ?> × ₱<?= number_format($item['price'], 2); ?></div>
+                    <div>₱<?= number_format($item['price'] * $item['quantity'], 2); ?></div>
                 </div>
                 <?php endforeach; ?>
             </section>
-            <section class="uk-card-body">
-                <div class="uk-grid-small" uk-grid>
-                    <div class="uk-width-expand">
-                        <div class="uk-text-muted">Shipping</div>
-                    </div>
-                    <div class="uk-text-right">
-                        <div>Pick up from store</div>
-                        <div class="uk-text-meta">Free, tomorrow</div>
-                    </div>
+            <section class="order-summary-body">
+                <div class="order-summary-item">
+                    <div>Shipping</div>
+                    <div>Pick up from store</div>
+                    <div>Free, tomorrow</div>
                 </div>
-                <div class="uk-grid-small" uk-grid>
-                    <div class="uk-width-expand">
-                        <div class="uk-text-muted">Payment</div>
-                    </div>
-                    <div class="uk-text-right">
-                        <div>Cash On Delivery</div>
-                    </div>
+                <div class="order-summary-item">
+                    <div>Payment</div>
+                    <div>QR Code Payment</div>
                 </div>
             </section>
-            <section class="uk-card-body">
-                <div class="uk-grid-small uk-flex-middle" uk-grid>
-                    <div class="uk-width-expand">
-                        <div class="uk-text-muted">Total</div>
-                    </div>
-                    <div class="uk-text-right">
-                        <div class="uk-text-lead uk-text-bolder">₱<?= number_format($total_price, 2); ?></div>
-                    </div>
+            <section class="order-summary-body">
+                <div class="order-summary-total">
+                    <div>Total</div>
+                    <div>₱<?= number_format($total_price, 2); ?></div>
                 </div>
             </section>
         </div>
     </div>
+
+    <!-- Modal for QR Code -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Scan QR Code to Pay</h2>
+            <img id="qrCodeImage" src="" alt="QR Code" style="height: 400px;">
+            <button onclick="markPaymentAsDone()">Done</button>
+        </div>
+    </div>
+
+    <script>
+    function validateForm() {
+        const form = document.getElementById('checkoutForm');
+        if (form.checkValidity()) {
+            openModal(<?= $total_price ?>);
+        } else {
+            form.reportValidity();
+        }
+    }
+
+    function openModal(total) {
+        document.getElementById('qrCodeImage').src = 'qrcode/' + total + '.jpg';
+        document.getElementById('paymentModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    function markPaymentAsDone() {
+        fetch('markPayment.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: <?= $user_id ?>, total: <?= $total_price ?> })
+        }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Payment marked as done. Please wait for admin confirmation.');
+                closeModal();
+                document.getElementById('checkoutForm').submit();
+            } else {
+                alert('Error marking payment as done: ' + data.message);
+            }
+        });
+    }
+    </script>
 </body>
 </html>

@@ -61,6 +61,14 @@ function getBotResponse(message) {
         response = 'We offer a wide range of products including Makeup and Skincare items. What specific product are you interested in?';
     } else if (userMessage.includes('problem') || userMessage.includes('issue')) {
         response = 'I am sorry to hear that you are facing issues. Can you please provide more details about the problem?';
+    } else if (userMessage.includes('recommend') || userMessage.includes('suggest')) {
+        response = 'Sure! Our most popular product is "Mabine\'s Hydrating Serum," which has the highest rating from our customers. Would you like to know more about it or see other top-rated products?';
+    } else if (userMessage.includes('top rated') || userMessage.includes('best seller')) {
+        response = 'Our best-selling product is "Mabine\'s Radiant Glow Cream." It\'s loved by many for its brightening and moisturizing effects. Would you like to add it to your cart or see customer reviews?';
+    } else if (userMessage.includes('discount') || userMessage.includes('sale')) {
+        response = 'We have ongoing discounts on various products! Currently, you can get a 20% discount on all our skincare products. Would you like to check them out?';
+    } else if (userMessage.includes('mascara') || userMessage.includes('lipstick')) {
+        response = 'Our best-selling mascara is "Mabine\'s Volumizing Mascara" and our top-rated lipstick is "Mabine\'s Matte Lipstick." Both are highly recommended by our customers. Would you like to add them to your cart or see other options?';
     }
 
     displayMessage('bot', response);

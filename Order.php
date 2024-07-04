@@ -15,7 +15,7 @@ $query = "SELECT orders.id, orders.total, orders.status, orders.created_at, prod
           FROM orders 
           INNER JOIN order_items ON orders.id = order_items.order_id 
           INNER JOIN products ON order_items.product_id = products.id 
-          WHERE orders.user_id = ? AND orders.status != 'delivered'";
+          WHERE orders.user_id = ? AND orders.status NOT IN ('delivered', 'Cancel Order', 'refund item')";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $user_id);
 $stmt->execute();
@@ -23,9 +23,12 @@ $result = $stmt->get_result();
 
 $order_status_messages = [
     'pending' => 'Pending',
+    'paid' => 'Paid, waiting for processing',
     'shipped' => 'Your item is packed and waiting for delivery',
     'in_transit' => 'Your item is with our logistic partner',
-    'delivered' => 'Your item is delivered'
+    'delivered' => 'Your item is delivered',
+    'Cancel Order' => 'Cancel Order',
+    'refund item' => 'Item Refund'
 ];
 
 // Fetch delivered orders for the logged-in user
@@ -70,12 +73,14 @@ $delivered_result = $delivered_stmt->get_result();
                             <td><?= htmlspecialchars($order['name']); ?></td>
                             <td><?= htmlspecialchars($order['quantity']); ?></td>
                             <td>₱<?= number_format($order['total'], 2); ?></td>
-                            <td><?= $order_status_messages[$order['status']]; ?></td>
+                            <td><?= $order_status_messages[$order['status']] ?? 'Unknown'; ?></td>
                             <td><?= htmlspecialchars($order['created_at']); ?></td>
                             <td>
                                 <?php if ($order['status'] == 'delivered'): ?>
                                     <a href="requestRefund.php?order_id=<?= htmlspecialchars($order['id']); ?>&product_id=<?= htmlspecialchars($order['product_id']); ?>" class="btn">Refund</a>
                                     <a href="rateProduct.php?order_id=<?= htmlspecialchars($order['id']); ?>&product_id=<?= htmlspecialchars($order['product_id']); ?>" class="btn">Rate</a>
+                                <?php elseif ($order['status'] != 'Cancel Order'): ?>
+                                    <a href="cancelOrder.php?order_id=<?= htmlspecialchars($order['id']); ?>" class="btn">Cancel</a>
                                 <?php endif; ?>
                             </td>
                         </tr>

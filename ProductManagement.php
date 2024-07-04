@@ -19,13 +19,191 @@ $result = $conn->query($query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Management</title>
-    <link rel="stylesheet" href="css/ProductManagement.css">
+    <style>
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.admin-container {
+    display: flex;
+    height: 100vh;
+}
+
+.admin-sidebar {
+    width: 500px;
+    background-color: #333;
+    color: #fff;
+}
+
+.admin-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-sidebar ul li {
+    padding: 20px;
+}
+
+.admin-sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.admin-sidebar ul li a:hover {
+    background-color: #555;
+}
+
+.admin-main {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.admin-header {
+    margin-bottom: 20px;
+}
+
+/* Table and Orders Styling */
+.admin-orders {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.admin-orders table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-orders th, .admin-orders td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.admin-orders th {
+    background-color: #333;
+    color: white;
+}
+
+.btn {
+    padding: 10px 16px; /* Adjusted padding for better click area */
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    margin-right: 10px;
+    transition: opacity 0.3s ease; /* Smooth transition for opacity */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #28a745;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+.btn-add-stock {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+.action-btn {
+    margin-bottom: 5px; /* Space between action buttons */
+}
+
+
+/* Popup Styles */
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
+}
+
+.popup.active, .popup-overlay.active {
+    display: block;
+}
+
+.popup h2 {
+    margin-top: 0;
+}
+
+.popup form {
+    display: flex;
+    flex-direction: column;
+}
+
+.popup form label {
+    margin-bottom: 5px;
+}
+
+.popup form input, .popup form select, .popup form textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.popup form button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    margin-top: 10px;
+}
+
+.popup form button[type="button"] {
+    background-color: #6c757d;
+}
+
+.popup form button:hover {
+    opacity: 0.8;
+}
+</style>
 </head>
 <body>
 <div class="admin-container">
     <div class="admin-sidebar">
         <ul>
-        <li><a href="admin.php">Dashboard</a></li>
+            <li><a href="admin.php">Dashboard</a></li>
             <li><a href="OrderManagement.php">Order Management</a></li>
             <li><a href="ProductManagement.php">Product Management</a></li>
             <li><a href="Categories.php">Categories</a></li>
@@ -39,9 +217,9 @@ $result = $conn->query($query);
             <p>Manage your products here.</p>
         </div>
         <div class="admin-button">
-            <button onclick="openPopup()">Add Product</button>
+            <button class="btn btn-primary" onclick="openPopup()">Add Product</button>
         </div>
-        <div class="admin-orders" style="overflow-y: auto; height: 400px;">
+        <div class="admin-orders">
             <table>
                 <thead>
                     <tr>
@@ -51,7 +229,6 @@ $result = $conn->query($query);
                         <th>Price</th>
                         <th>Category</th>
                         <th>Stock</th>
-                        <th>Image</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -64,14 +241,19 @@ $result = $conn->query($query);
                         <td>₱<?= number_format($row['price'], 2) ?></td>
                         <td><?= htmlspecialchars($row['category_id']) ?></td>
                         <td><?= htmlspecialchars($row['stock_quantity']) ?></td>
-                        <td><img src="img/<?= htmlspecialchars($row['image']) ?>" alt="<?= htmlspecialchars($row['name']) ?>" width="50"></td>
-                        <td>
-                            <a href="editProduct.php?id=<?= $row['id'] ?>" class="admin-button">Edit</a>
-                            <form action="deleteProduct.php" method="POST" style="display:inline;" class="delete-product-form">
-                                <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                <button type="submit" class="admin-button-delete">Delete</button>
-                            </form>
-                            <button class="admin-button-add-stock" onclick="openAddStockPopup(<?= $row['id'] ?>)">Add Stock</button>
+                        <td class="action-buttons">
+                            <div class="action-btn">
+                                <a href="editProduct.php?id=<?= $row['id'] ?>" class="btn btn-edit">Edit</a>
+                            </div>
+                            <div class="action-btn">
+                                <form action="deleteProduct.php" method="POST" class="delete-product-form">
+                                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                    <button type="submit" class="btn btn-delete">Delete</button>
+                                </form>
+                            </div>
+                            <div class="action-btn">
+                                <button class="btn btn-add-stock" onclick="openAddStockPopup(<?= $row['id'] ?>)">Add Stock</button>
+                            </div>
                         </td>
                     </tr>
                     <?php endwhile; ?>
@@ -110,11 +292,8 @@ $result = $conn->query($query);
         <label for="stock_quantity">Stock Quantity</label>
         <input type="number" id="stock_quantity" name="stock_quantity" required>
 
-        <label for="image">Product Image</label>
-        <input type="file" id="image" name="image" accept="image/*">
-
-        <button type="submit">Add Product</button>
-        <button type="button" onclick="closePopup()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+        <button type="button" onclick="closePopup()" class="btn btn-secondary">Cancel</button>
     </form>
 </div>
 
@@ -126,8 +305,8 @@ $result = $conn->query($query);
         <input type="hidden" id="add_stock_product_id" name="product_id">
         <label for="add_stock_quantity">Stock Quantity</label>
         <input type="number" id="add_stock_quantity" name="quantity" required>
-        <button type="submit">Add Stock</button>
-        <button type="button" onclick="closeAddStockPopup()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add Stock</button>
+        <button type="button" onclick="closeAddStockPopup()" class="btn btn-secondary">Cancel</button>
     </form>
 </div>
 
@@ -173,6 +352,5 @@ document.querySelectorAll('.delete-product-form').forEach(form => {
     });
 });
 </script>
-
 </body>
 </html>

@@ -127,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <p>Dear Customer,</p>
                             <p>Your refund request has been processed successfully. Please wait for the delivery team to claim the item.</p>
                             <p>If you have any questions, feel free to contact our support team.</p>
-                            <a href="http://localhost/Midterm/Midterm-Ecommerce/index.php">Visit Our Store</a>
+                            <a href="http://localhost:8080/Midterm/Midterm-Ecommerce/index.php">Visit Our Store</a>
                         </div>
                         <div class="footer">
                             <p>&copy; 2024 Mabine\'s Cosmetic. All rights reserved.</p>

@@ -58,7 +58,7 @@ if (count($sales_data) !== count($orders_data)) {
 <html>
 <head>
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/AdminDashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -79,31 +79,35 @@ if (count($sales_data) !== count($orders_data)) {
                 <p>Admin Dashboard</p>
             </header>
             <section class="admin-dashboard">
-                <div class="dashboard-card">
-                    <h3>Total Sales</h3>
-                    <p>₱<?= number_format($total_sales, 2); ?></p>
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <h3>Total Sales</h3>
+                        <p>₱<?= number_format($total_sales, 2); ?></p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Orders Today</h3>
+                        <p><?= $orders_today; ?></p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Total Users</h3>
+                        <p><?= $total_users; ?></p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Total Products</h3>
+                        <p><?= $total_products; ?></p>
+                    </div>
                 </div>
-                <div class="dashboard-card">
-                    <h3>Orders Today</h3>
-                    <p><?= $orders_today; ?></p>
-                </div>
-                <div class="dashboard-card">
-                    <h3>Total Users</h3>
-                    <p><?= $total_users; ?></p>
-                </div>
-                <div class="dashboard-card">
-                    <h3>Total Products</h3>
-                    <p><?= $total_products; ?></p>
-                </div>
-                <!-- Weekly Sales Graph -->
-                <div class="dashboard-card">
-                    <h3>Weekly Sales</h3>
-                    <canvas id="salesChart"></canvas>
-                </div>
-                <!-- Weekly Orders Graph -->
-                <div class="dashboard-card">
-                    <h3>Weekly Orders</h3>
-                    <canvas id="ordersChart"></canvas>
+                <div class="graphs-cards">
+                    <!-- Weekly Sales Graph -->
+                    <div class="graphs-card">
+                        <h3>Weekly Sales</h3>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                    <!-- Weekly Orders Graph -->
+                    <div class="graphs-card">
+                        <h3>Weekly Orders</h3>
+                        <canvas id="ordersChart"></canvas>
+                    </div>
                 </div>
             </section>
         </main>
